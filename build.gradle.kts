@@ -52,6 +52,7 @@ kotlin {
         val commonMain by getting  { // predefined by gradle multiplatform plugin
             dependencies {
                 //implementation("io.github.microutils:kotlin-logging:2.0.6")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.1.1")
             }
         }
         val commonTest by getting {
