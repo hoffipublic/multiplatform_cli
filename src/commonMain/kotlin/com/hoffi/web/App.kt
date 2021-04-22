@@ -1,7 +1,6 @@
 package com.hoffi.web
 
 import com.hoffi.mpp.log.Logger
-import kotlin.reflect.KClass
 
 fun main(args: Array<String>) {
     App().doIt(args)
