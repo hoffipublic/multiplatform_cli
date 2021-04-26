@@ -1,129 +1,66 @@
 plugins {
-    kotlin("multiplatform") version "1.4.32"
-    application
+    // `kotlin-dsl`
+    id("java")
+    kotlin("jvm") version Deps.JetBrains.Kotlin.VERSION apply false
+    kotlin("multiplatform") version Deps.JetBrains.Kotlin.VERSION apply false
+    kotlin("plugin.serialization") version Deps.JetBrains.Kotlin.VERSION apply false
+    kotlin("kapt") version Deps.JetBrains.Kotlin.VERSION apply false
+    kotlin("plugin.allopen") version Deps.JetBrains.Kotlin.VERSION apply false
+    id("com.github.johnrengelman.shadow") version Deps.Plugins.Shadow.VERSION apply false
+    id("idea")
 }
 
 group = "com.hoffi"
-version = "1.0.0"
-val theMainClass by extra { "com.hoffi.web.AppKt" }
+version = "1.0.0" // apple dmg insists on a version not starting with a '0'
+val artifactName by extra { rootProject.name.toLowerCase() }
 
-repositories {
-    mavenCentral()
-}
+val repoSsh by extra("git@gitlab.com:???.git")
+val repoHttps by extra("https://gitlab.com/???.git")
 
-kotlin {
-    jvm {
-        //withJava() // applies the Gradle java plugin to allow the multiplatform project to have both Java and Kotlin source files (src/jvmMain/java/...)
+// implemented in buildSrc/src/main/kotlin/Deps.kt
+tasks.register<CheckVersionsTask>("checkVersions")
 
-        // compilations.all {
-        //     kotlinOptions.jvmTarget = "1.8"
-        // }
-
-        // create an executable java fat jar
-        val jvmJar by tasks.getting(org.gradle.jvm.tasks.Jar::class) {
-            doFirst {
-                // configurations.forEach { println(it.name) }
-                manifest {
-                    attributes["Main-Class"] = theMainClass
-                }
-                from(configurations.getByName("jvmRuntimeClasspath").map { if (it.isDirectory) it else zipTree(it) })
-            }
-        }
-    }
-    macosX64("mac") { // without name param, creates sourceSet named("macosX64Main") and named("macosX64Main")
-        // linuxX64("linux") // on Linux
-        // mingwX64("windows") // on Windows
-        binaries {
-            executable {
-                // entry point function = package with non-inside-object main method + ".main" (= name of the main function)
-                entryPoint(theMainClass.replaceAfterLast(".", "main"))
-                //runTask?.args("")
-                // Use the following Gradle tasks to run your application:
-                // (<subproject>):runReleaseExecutableMacos - without debug symbols
-                // (<subproject>):runDebugExecutableMacos - with debug symbols
-            }
-        }
+allprojects {
+    repositories {
+        mavenCentral()
     }
 
-    // https://kotlinlang.org/docs/mpp-share-on-platforms.html#share-code-in-libraries
-    // To enable usage of platform-dependent libraries in shared source sets, add the following to your `gradle.properties`
-    // kotlin.mpp.enableGranularSourceSetsMetadata=true
-    // kotlin.native.enableDependencyPropagation=false
-    sourceSets {
-        val commonMain by getting  { // predefined by gradle multiplatform plugin
-            dependencies {
-                //implementation("io.github.microutils:kotlin-logging:2.0.6")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.1.1")
-            }
-        }
-        val commonTest by getting {
-            dependencies {
-            }
-        }
-
-        val jvmMain by getting {
-            //print("${name} dependsOn: ")
-            //println(dependsOn.map { it.name }.joinToString())
-            dependencies {
-                implementation("ch.qos.logback:logback-classic:1.2.3")
-                implementation("org.slf4j:slf4j-api:1.7.30")
-            }
-        }
-        val jvmTest by getting {
-            dependencies {
-                implementation(kotlin("test-junit"))
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-            }
-        }
-
-        val macMain by getting { // named("macMain") {
-            dependencies {
-
-            }
-        }
-        val macTest by getting { // named("macTest") {
-            dependencies {
-
+    tasks {
+        withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+            kotlinOptions {
+                useIR = true
+                jvmTarget = java.targetCompatibility.majorVersion
+                //Will retain parameter names for Java reflection
+                javaParameters = true
+                //freeCompilerArgs = freeCompilerArgs + listOf(
+                //    "--Xjavac-arguments=-Xlint:-deprecation"
+                //)
             }
         }
     }
 }
 
-application {
-    mainClass.set(theMainClass)
-}
+// copy all jars to root project's build/libs
+val gather = tasks.register<Copy>("gather") {
+    mkdir(File(rootProject.buildDir,"libs"))
+    val allSubprojectsLibDirs: MutableList<String> = mutableListOf()
+    subprojects.forEach { allSubprojectsLibDirs.add("${it.buildDir}/libs") }
+    into(project.rootProject.buildDir.toString())
+    into("libs") {
+        from(allSubprojectsLibDirs)
+    }
 
-tasks.getByName<JavaExec>("run") {
-    classpath(tasks.getByName<Jar>("jvmJar")) // so that the JS artifacts generated by `jvmJar` can be found and served
-}
-
-// ################################################################################################
-// #####    pure informational stuff on stdout    #################################################
-// ################################################################################################
-tasks.register("printClasspath") {
-    group = "misc"
-    description = "print classpath"
-    doLast {
-        //project.getConfigurations().filter { it.isCanBeResolved }.forEach {
-        //    println(it.name)
-        //}
-        //println()
-        val targets = listOf(
-            "metadataCommonMainCompileClasspath",
-            "commonMainApiDependenciesMetadata",
-            "commonMainImplementationDependenciesMetadata",
-            "jvmCompileClasspath",
-            "kotlinCompilerClasspath"
-        )
-        targets.forEach { targetConfiguration ->
-            println("$targetConfiguration:")
-            println("=".repeat("$targetConfiguration:".length))
-            project.getConfigurations()
-                .getByName(targetConfiguration).files
-                // filters only existing and non-empty dirs
-                .filter { (it.isDirectory() && it.listFiles().isNotEmpty()) || it.isFile() }
-                .forEach { println(it) }
+    mkdir(File(rootProject.buildDir,"bin"))
+    val allSubprojectsBinDirs: MutableList<String> = mutableListOf()
+    subprojects.forEach { theSubproject ->
+        listOf("mac", "unix", "windows").forEach {
+            into("bin/${it}") {
+                from("${theSubproject.buildDir}/bin/${it}/releaseExecutable")
+                include("*.kexe")
+            }
         }
     }
 }
+val build by tasks.existing { finalizedBy(gather) }
+// build.finalizedBy publishToMavenLocal // push jars to mavenLocal after build
+val clean by tasks.existing { delete(rootProject.buildDir) }

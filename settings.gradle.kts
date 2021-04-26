@@ -1,3 +1,6 @@
 
-rootProject.name = "minimal_kotlin_multiplatform"
+rootProject.name = "multiplatform_cli"
 
+include(":lib")
+
+include(":cli")
