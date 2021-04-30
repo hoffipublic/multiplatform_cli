@@ -66,8 +66,8 @@ kotlin {
             dependencies {
                 implementation(project(":lib"))
                 //implementation("io.github.microutils:kotlin-logging:2.0.6")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Deps.Misc.DATETIME.datetimeVersion}")
-                implementation("com.github.ajalt.clikt:clikt:${Deps.Misc.CLICKT.cliktVersion}")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Deps.Misc.DATETIME.VERSION}")
+                implementation("com.github.ajalt.clikt:clikt:${Deps.Misc.CLIKT.VERSION}")
             }
         }
         val commonTest by getting {

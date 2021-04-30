@@ -13,8 +13,8 @@ open class CheckVersionsTask : DefaultTask() {
         val gradlewVersion  = "${project.rootProject.projectDir}/gradlew --version".runCommand()?.let { gradleVersionRegex.find(it)?.value } ?: "unknown"
         if (gradleShellVersion != gradlewVersion) println("mismatch:  shell ${gradleShellVersion}\nvs local wrapper ${gradlewVersion}")
 
-        println("actually used dependencies to check: ${Deps.DEPS_TO_CHECK.size}")
-        for (depEntry in Deps.DEPS_TO_CHECK) {
+        println("actually used dependencies to check: ${Deps.APPLIED_DEPS.size}")
+        for (depEntry in Deps.APPLIED_DEPS) {
             val dep = depEntry.value
             try {
                 val text = dep.mavenMetadataXmlURL().readText()
@@ -48,7 +48,7 @@ open class CheckVersionsTask : DefaultTask() {
         }
 
         println("\nGradle Plugins:\n===============")
-        for(depPlugin in Deps.GRADLE_PLUGINS_TO_CHECK) {
+        for(depPlugin in Deps.APPLIED_PLUGINS) {
             val regexLatest = Regex("Version (.*) \\(latest\\)", setOf(RegexOption.MULTILINE, RegexOption.UNIX_LINES))
             val url = "https://plugins.gradle.org/plugin/${depPlugin.id}"
             val text = java.net.URL(url).readText()
