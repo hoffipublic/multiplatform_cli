@@ -9,6 +9,12 @@ version = "${rootProject.version}"
 val artifactName by extra { "${rootProject.name.toLowerCase()}-${project.name.toLowerCase()}" }
 val theMainClass by extra { "com.hoffi.mpp.cli.AppKt" }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
+
 kotlin {
     jvm {
         //withJava() // applies the Gradle java plugin to allow the multiplatform project to have both Java and Kotlin source files (src/jvmMain/java/...)
