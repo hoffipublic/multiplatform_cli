@@ -28,8 +28,6 @@ allprojects {
     tasks {
         withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
             kotlinOptions {
-                //useIR = true
-                //jvmTarget = java.targetCompatibility.majorVersion
                 //Will retain parameter names for Java reflection
                 javaParameters = true
                 //freeCompilerArgs = freeCompilerArgs + listOf(

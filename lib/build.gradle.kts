@@ -10,11 +10,13 @@ repositories {
     mavenCentral()
 }
 
+// Kotlin compilation tasks will also use this
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(11))
     }
 }
+
 
 kotlin {
     jvm {
