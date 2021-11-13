@@ -46,6 +46,11 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                implementation("io.github.microutils:kotlin-logging:${Deps.Logging.kotlinLogging_VERSION}")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Deps.Misc.DATETIME.VERSION}")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Deps.Misc.KOTLINXJSON.VERSION}")
+                //implementation("com.charleskorn.kaml:kaml:${Deps.Misc.KOTLINXYAML.VERSION}")
+                implementation("net.mamoe.yamlkt:yamlkt:${Deps.Misc.KOTLINXYAMLKT.VERSION}")
             }
         }
         val commonTest by getting {
@@ -56,7 +61,7 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
+                implementation("ch.qos.logback:logback-classic:${Deps.Logging.logbackVersion}")
             }
         }
         val jvmTest by getting {

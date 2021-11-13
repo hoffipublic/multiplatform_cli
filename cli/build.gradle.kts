@@ -65,7 +65,7 @@ kotlin {
         val commonMain by getting  { // predefined by gradle multiplatform plugin
             dependencies {
                 implementation(project(":lib"))
-                //implementation("io.github.microutils:kotlin-logging:2.0.6")
+                implementation("io.github.microutils:kotlin-logging:${Deps.Logging.kotlinLogging_VERSION}")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Deps.Misc.DATETIME.VERSION}")
                 implementation("com.github.ajalt.clikt:clikt:${Deps.Misc.CLIKT.VERSION}")
             }
@@ -79,7 +79,7 @@ kotlin {
             //print("${name} dependsOn: ")
             //println(dependsOn.map { it.name }.joinToString())
             dependencies {
-                //implementation("ch.qos.logback:logback-classic:1.2.3")
+                implementation("ch.qos.logback:logback-classic:${Deps.Logging.logbackVersion}")
                 //implementation("org.slf4j:slf4j-api:1.7.30")
             }
         }
@@ -105,7 +105,6 @@ kotlin {
 }
 
 application {
-    mainClassName = theMainClass // workaround for shadow plugin (might be fixed in shadow gradle plugin > 6.1.0)
     mainClass.set(theMainClass)
 }
 
@@ -127,10 +126,10 @@ tasks {
         }
         mergeServiceFiles()
 
-        archiveClassifier.set("fat")
+        //archiveClassifier.set("fat")
         from(kotlin.jvm().compilations.getByName("main").output)
         configurations =
-            mutableListOf(kotlin.jvm().compilations.getByName("main").compileDependencyFiles as Configuration)
+            mutableListOf(kotlin.jvm().compilations.getByName("main").compileDependencyFiles)
     }
     val build by existing {
         dependsOn(shadowCreate)

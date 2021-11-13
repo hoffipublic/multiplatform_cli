@@ -22,6 +22,7 @@ tasks.register<CheckVersionsTask>("checkVersions")
 
 allprojects {
     repositories {
+        mavenLocal()
         mavenCentral()
     }
 

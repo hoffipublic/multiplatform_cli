@@ -42,12 +42,12 @@ object Deps {
 
     object Plugins {
         object Micronaut {
-            val VERSION = "2.0.3"
+            val VERSION = "2.0.7"
             val micronautPlugin = DepPlugin("Micronaut", VERSION, "io.micronaut.application")
                 .also{ APPLIED_PLUGINS.add(it) }
         }
         object Shadow {
-            val VERSION = "7.0.0"
+            val VERSION = "7.1.0"
             val shadowPlugin = DepPlugin("Shadow", VERSION, "com.github.johnrengelman.shadow")
                 .also{ APPLIED_PLUGINS.add(it) }
         }
@@ -68,7 +68,7 @@ object Deps {
                 .also { APPLIED_DEPS[Junit.javaClass.simpleName] = it }
         }
         object Kotest {
-            val VERSION = "4.6.2"
+            val VERSION = "4.6.3"
             val GROUPLEADER = Dep.from("io.kotest:kotest-runner-junit5-jvm:${VERSION}")
             val kotest = GROUPLEADER
                 .also { APPLIED_DEPS[Kotest.javaClass.simpleName] = it }
@@ -78,7 +78,7 @@ object Deps {
     object JetBrains {
         object Kotlin {
             // __KOTLIN_VERSION__
-            val VERSION = "1.5.30"
+            val VERSION = "1.5.31"
             val GROUPLEADERDEP = Dep.from("org.jetbrains.kotlin:kotlin-gradle-plugin:$VERSION")
 
             val kotlin = GROUPLEADERDEP
@@ -93,7 +93,7 @@ object Deps {
         object Compose {
             // __LATEST_COMPOSE_RELEASE_VERSION__
             // https://github.com/JetBrains/compose-jb/releases
-            val VERSION = "1.0.0-alpha4-build328" //"0.5.0-build270"// https://maven.pkg.jetbrains.space/public/p/compose/dev/org/jetbrains/compose/compose-gradle-plugin/maven-metadata.xml
+            val VERSION = "1.0.0-beta1"
             val GROUPLEADERDEP = Dep.from("org.jetbrains.compose:compose-gradle-plugin:$VERSION", repo = JETBRAINS)
                 .also { APPLIED_DEPS[Compose.javaClass.simpleName] = it }
 
@@ -101,7 +101,7 @@ object Deps {
         }
 
         object Exposed {
-            val VERSION = "0.33.1"
+            val VERSION = "0.35.3"
             val GROUPLEADERDEP = Dep.from("org.jetbrains.exposed:exposed-core:$VERSION")
                 .also { APPLIED_DEPS[Exposed.javaClass.simpleName] = it}
 
@@ -111,7 +111,7 @@ object Deps {
 
     object Core {
         object Arrow {
-            val VERSION = "0.13.2"
+            val VERSION = "1.0.0"
             val dep = Dep.from("io.arrow-kt:arrow-core:$VERSION")
                 .also { APPLIED_DEPS[Arrow.javaClass.simpleName] = it }
         }
@@ -119,7 +119,7 @@ object Deps {
 
     object Micronaut {
         object BOM {
-            val VERSION = "2.5.12"
+            val VERSION = "3.1.1"
             val GROUPLEADERDEP = Dep.from("io.micronaut:micronaut-bom:$VERSION")
                 .also { APPLIED_DEPS[Micronaut.javaClass.simpleName] = it }
 
@@ -129,7 +129,7 @@ object Deps {
 
     object DB {
         object Postgresql {
-            val VERSION = "42.2.19"
+            val VERSION = "42.3.0"
             val GROUPLEADERDEP = Dep.from("org.postgresql:postgresql:$VERSION", versionRegex = "${THREEDIGITSs}\\.jre\\d*\$")
                 .also { APPLIED_DEPS[Postgresql.javaClass.simpleName] = it }
 
@@ -156,7 +156,7 @@ object Deps {
     }
 
     object Logging {
-        val logbackVersion = "1.2.5"
+        val logbackVersion = "1.2.6"
         val logback = Dep.from("ch.qos.logback:logback-classic:$logbackVersion")
             .also { APPLIED_DEPS["logback"] = it }
 
@@ -164,6 +164,9 @@ object Deps {
         val slf4jApi = Dep.from("org.slf4j:slf4j-api:${slf4j_VERSION}")
             .also { APPLIED_DEPS[Logging.javaClass.simpleName] = it }
 
+        val kotlinLogging_VERSION = "2.0.12"
+        val kotlinLogging = Dep.from("io.github.microutils:kotlin-logging:${kotlinLogging_VERSION}")
+            .also { APPLIED_DEPS[Logging.javaClass.simpleName] = it }
     }
 
     object Eclipse {
@@ -202,7 +205,7 @@ object Deps {
 
     object Squareup {
         object OKHTTP {
-            val VERSION = "4.9.1"
+            val VERSION = "4.9.2"
             val okhttp = Dep.from("com.squareup.okhttp3:okhttp:${VERSION}")
                 .also { APPLIED_DEPS[OKHTTP.javaClass.simpleName] = it }
         }
@@ -246,6 +249,16 @@ object Deps {
             val kotlinxJson = Dep.from("org.jetbrains.kotlinx:kotlinx-serialization-json:$VERSION")
                 .also { APPLIED_DEPS[KOTLINXJSON.javaClass.simpleName] = it }
             val kotlinxYaml = Dep.from("net.mamoe.yamlkt:yamlkt:${yamlVersion}")
+        }
+        object KOTLINXYAML {
+            val VERSION = "0.36.0"
+            val kotlinxJson = Dep.from("com.charleskorn.kaml:kaml:$VERSION")
+                .also { APPLIED_DEPS[KOTLINXYAML.javaClass.simpleName] = it }
+        }
+        object KOTLINXYAMLKT {
+            val VERSION = "0.10.2"
+            val kotlinxJson = Dep.from("net.mamoe.yamlkt:yamlkt:$VERSION")
+                .also { APPLIED_DEPS[KOTLINXYAMLKT.javaClass.simpleName] = it }
         }
         object CLIKT {
             val VERSION = "3.2.0"
@@ -300,7 +313,7 @@ object Deps {
         }
 
         object Decompose {
-            val VERSION = "0.3.1"
+            val VERSION = "0.4.0"
             val GROUPLEADERDEP = Dep.from("com.arkivanov.decompose:decompose:$VERSION")
                 .also { APPLIED_DEPS[Decompose.javaClass.simpleName] = it}
 
