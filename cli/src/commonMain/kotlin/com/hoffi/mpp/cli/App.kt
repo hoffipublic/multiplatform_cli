@@ -29,19 +29,19 @@ class App : CliktCommand() {
         val userinput = Console.inputLine("Console input: ")
         Console.echoErr("stderr: input was: $userinput")
 
-        MppProcess.executeCommand("""
+        MppProcess.executeCommandFramed("""
             echo "this xxx the first line" | sed 's/xxx/is/'
-            echo "some fancy second line" 'with both quotes'
-        """.trimIndent(), echoCmdToErr = true)
-
+            echo "some fancy second line" 'with both quotes' \
+                 over multiple lines
+        """.trimIndent(), echoCmdToErr = true, teeStdout = true)
 
 //        val longoutputcmd = "cat '/Users/hoffi/Documents/CalibreLibrary/metadata_db_prefs_backup.json'"
 //        log.info { "executing: $longoutputcmd"}
-//        var result: Pair<Int, List<String>> = MppProcess.executeCommand(longoutputcmd)
-//        log.warn { "result code: ${result.first}" }
-//        log.warn { echo() ; result.second.joinToString("\n") }
-//
+//        val longResult: ProcessResult = MppProcess.executeCommandFramed(longoutputcmd, echoCmdToErr = true)
+//        log.warn { "result code: ${longResult.returnCode}" }
+//        log.warn { echo() ; longResult.outputLines.joinToString("\n") }
 //        echo()
+
         val cmd = """
             ls -lsh \
                -Fp | awk "match(\${'$'}0, /^(.*)(${'$'}(whoami))(.*)${'$'}/, m) { print m[1] \"redacted\" m[3]; next };1"

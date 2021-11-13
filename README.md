@@ -65,6 +65,25 @@ cli/build/bin/windows/releaseExecutable/cli.kexe --name Windows
 ## example output
 
 ```kotlin
+MppProcess.executeCommandFramed("""
+    echo "this xxx the first line" | sed 's/xxx/is/'
+    echo "some fancy second line" 'with both quotes' \
+         over multiple lines
+""".trimIndent(), echoCmdToErr = true, teeStdout = true)
+```
+
+```
+╭╴echo "this xxx the first line" | sed 's/xxx/is/'
+│ echo "some fancy second line" 'with both quotes' \
+│      over multiple lines
+├───────────────────────────────────────────────────
+│ this is the first line
+│ some fancy second line with both quotes over multiple lines
+╰────────────────────────────────────────────────────────────
+```
+
+
+```kotlin
 val userinput = Console.inputLine("Console input: ")
 Console.echoErr("<stderr> input was: $userinput")
 ```
