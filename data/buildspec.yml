@@ -1,0 +1,32 @@
+version: '0.2'
+phases:
+  install:
+    runtime-versions:
+      nodejs: 12
+    commands:
+      - apt-get update -y
+      - apt-get install apt-transport-https gnupg jq -y
+  pre_build:
+    commands:
+      - echo "Prebuild, installing npm dependencies"
+      - aws codeartifact login --tool npm --domain artifacts-dev1 --domain-owner 642238694589 --repository LG-DEMO-CodeArtifact-Dev1
+      - sed -i 's#registry=https://artifacts-dev1-642238694589.d.codeartifact.eu-central-1.amazonaws.com/npm/LG-DEMO-CodeArtifact-Dev1/#@lavasuite:registry=https://artifacts-dev1-642238694589.d.codeartifact.eu-central-1.amazonaws.com/npm/LG-DEMO-CodeArtifact-Dev1/#' ~/.npmrc
+      - export theEnv="int"
+      - echo "npm install"
+      - npm install
+  build:
+    commands:
+      - echo "Starting the build step"
+      - npm run buildprod
+      - echo "Finished"
+  post_build:
+    commands:
+      - tools/doPublish.sh
+artifacts:
+  name: "BuildOutput"
+  base-directory: 'dist'
+  files:
+    - '**/*'
+cache:
+  paths:
+    - '/root/.npm/**/*'

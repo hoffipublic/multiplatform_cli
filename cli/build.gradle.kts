@@ -1,5 +1,6 @@
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.serialization")
     id("com.github.johnrengelman.shadow")
     application
 }
@@ -67,6 +68,12 @@ kotlin {
                 implementation(project(":lib"))
                 implementation("io.github.microutils:kotlin-logging:${Deps.Logging.kotlinLogging_VERSION}")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Deps.Misc.DATETIME.VERSION}")
+                //api(platform("com.squareup.okio:okio-bom:3.0.0"))
+                implementation("com.squareup.okio:okio:${Deps.Squareup.OKIO.VERSION}")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Deps.Misc.KOTLINXJSON.VERSION}")
+                //implementation("com.charleskorn.kaml:kaml:${Deps.Misc.KOTLINXYAML.VERSION}")
+                implementation("net.mamoe.yamlkt:yamlkt:${Deps.Misc.KOTLINXYAMLKT.VERSION}")
+
                 implementation("com.github.ajalt.clikt:clikt:${Deps.Misc.CLIKT.VERSION}")
             }
         }

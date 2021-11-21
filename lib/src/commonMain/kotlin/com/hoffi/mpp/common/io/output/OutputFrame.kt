@@ -1,4 +1,4 @@
-package com.hoffi.mpp.common.io
+package com.hoffi.mpp.common.io.output
 
 object OutputFrame {
     // @formatter:off

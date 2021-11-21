@@ -1,9 +1,9 @@
 package com.hoffi.mpp.common.io.mpp
 
-import com.hoffi.mpp.common.io.OutputFrame
-import com.hoffi.mpp.common.io.OutputFrame.LINES
-import com.hoffi.mpp.common.io.OutputFrame.WHERE.FIRST
-import com.hoffi.mpp.common.io.OutputFrame.WHERE.MIDDLE
+import com.hoffi.mpp.common.io.output.OutputFrame
+import com.hoffi.mpp.common.io.output.OutputFrame.LINES
+import com.hoffi.mpp.common.io.output.OutputFrame.WHERE.FIRST
+import com.hoffi.mpp.common.io.output.OutputFrame.WHERE.MIDDLE
 import java.lang.Integer.max
 import java.util.concurrent.TimeUnit
 

@@ -220,7 +220,7 @@ object Deps {
                 .also { APPLIED_DEPS[MOSHI.javaClass.simpleName] = it }
         }
         object OKIO {
-            val VERSION = "2.10.0"
+            val VERSION = "3.0.0"
             val okio = Dep.from("com.squareup.okio:okio:${VERSION}")
                 .also { APPLIED_DEPS[OKIO.javaClass.simpleName] = it }
         }
@@ -239,12 +239,12 @@ object Deps {
 
     object Misc {
         object DATETIME {
-            val VERSION = "0.2.1"
+            val VERSION = "0.3.1"
             val datetime = Dep.from("org.jetbrains.kotlinx:kotlinx-datetime:$VERSION")
                 .also { APPLIED_DEPS[DATETIME.javaClass.simpleName] = it }
         }
         object KOTLINXJSON {
-            val VERSION = "1.2.2"
+            val VERSION = "1.3.1"
             val yamlVersion = "0.10.0"
             val kotlinxJson = Dep.from("org.jetbrains.kotlinx:kotlinx-serialization-json:$VERSION")
                 .also { APPLIED_DEPS[KOTLINXJSON.javaClass.simpleName] = it }
@@ -261,7 +261,7 @@ object Deps {
                 .also { APPLIED_DEPS[KOTLINXYAMLKT.javaClass.simpleName] = it }
         }
         object CLIKT {
-            val VERSION = "3.2.0"
+            val VERSION = "3.3.0"
             val clikt = Dep.from("com.github.ajalt.clikt:clikt:$VERSION")
                 .also { APPLIED_DEPS[CLIKT.javaClass.simpleName] = it }
         }

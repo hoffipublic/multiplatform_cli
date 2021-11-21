@@ -1,14 +1,14 @@
 package com.hoffi.mpp.common.io.mpp
 
-import com.hoffi.mpp.common.io.OutputFrame
-import com.hoffi.mpp.common.io.OutputFrame.LINES
+import com.hoffi.mpp.common.io.output.OutputFrame
+import com.hoffi.mpp.common.io.output.OutputFrame.LINES
 import kotlinx.cinterop.refTo
 import kotlinx.cinterop.toKString
 import platform.posix.fgets
 import platform.posix.pclose
 import platform.posix.popen
 import kotlin.math.max
-import com.hoffi.mpp.common.io.OutputFrame.WHERE.FIRST as FIRST1
+import com.hoffi.mpp.common.io.output.OutputFrame.WHERE.FIRST as FIRST1
 
 actual object MppProcess : IMppProcess {
     actual override fun executeCommand(

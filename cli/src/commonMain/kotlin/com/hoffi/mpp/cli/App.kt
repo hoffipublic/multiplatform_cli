@@ -5,11 +5,21 @@ import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.prompt
 import com.github.ajalt.clikt.parameters.types.int
+import com.hoffi.mpp.cli.filesystem.fileSystem
+import com.hoffi.mpp.cli.mappings.Buildspec
+import com.hoffi.mpp.cli.mappings.Nested
 import com.hoffi.mpp.common.io.mpp.Console
 import com.hoffi.mpp.common.io.mpp.MppProcess
 import com.hoffi.mpp.common.io.mpp.ProcessResult
 import com.hoffi.mpp.common.io.mpp.executeCommand
+import com.hoffi.mpp.common.io.mpp.json.Generic
+import com.hoffi.mpp.common.io.mpp.json.Pretty
+import com.hoffi.mpp.common.io.mpp.json.collapseParenthesises
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import mu.KotlinLogging
+import net.mamoe.yamlkt.Yaml
+import okio.Path.Companion.toPath
 
 fun main(args: Array<String>) {
     App().main(args)
@@ -29,6 +39,11 @@ class App : CliktCommand() {
         val userinput = Console.inputLine("Console input: ")
         Console.echoErr("stderr: input was: $userinput")
 
+        mppProcesses()
+        jsonYaml()
+    }
+
+    fun mppProcesses() {
         MppProcess.executeCommandFramed("""
             echo "this xxx the first line" | sed 's/xxx/is/'
             echo "some fancy second line" 'with both quotes' \
@@ -72,6 +87,67 @@ class App : CliktCommand() {
         // something.
         //
         // result END
+    }
 
+    fun jsonYaml() {
+        //val yamlParserConfig = YamlConfiguration(strictMode = false, breakScalarsAt = 120) // sequenceStyle = flow // for [1, 2, 3]
+
+        var input = fileSystem.read("./data/buildspec.yml".toPath()) { readUtf8() }
+        val buildspec: Buildspec = Yaml.decodeFromString(Buildspec.serializer(), input)
+        println("=== Kotlin:")
+        println(buildspec)
+
+        println("====================================================")
+        println("extracted: ${buildspec.phases.build.commands.joinToString("', '", "['", "']")}")
+        println("single.1: '${buildspec.phases.build.commands[1]}'")
+        println("====================================================")
+
+        println("\n\n=== kotlinx pretty:")
+        var json: String = Pretty.JSON.encodeToString(buildspec)
+        println(json)
+
+        println("\n\n===manually collapsed:")
+        println(json.collapseParenthesises())
+
+        println("\n\n=== collapsed pretty:")
+        json = Pretty.JSON.encodeToString(buildspec).collapseParenthesises()
+        println(json)
+
+
+        println("\n\n==== complex manual:")
+        input = fileSystem.read("./data/nested.json".toPath()) { readUtf8() }
+        var nested: Nested =  Json { ignoreUnknownKeys = true }
+            .decodeFromString(Nested.serializer(), input)
+        println(nested)
+        println("\n\n==== complex encodeToString:")
+        var s = Pretty.JSON.encodeToString(nested)
+        println(s)
+        println("\n\n==== complex encodeToString collapsed:")
+        s = s.collapseParenthesises()
+        println(s)
+
+        println("\n\n=== parseToJsonElement:")
+        val jsonMap: MutableMap<String, Any> = Generic.parseToMap(input)
+        println(jsonMap)
+
+
+        println("\n\n========================================")
+        println("=== parseToJsonElement: ================")
+        println("========================================")
+        val jsonInput = fileSystem.read("./data/buildspec.json".toPath()) { readUtf8() }
+        val theMap: MutableMap<String, Any> = Generic.parseToMap(jsonInput)
+        println(theMap)
+
+        val extracted = Generic.get(theMap, "phases.pre_build.commands.3")
+        println("\nextracted single: $extracted")
+
+        println("\nextracted array:")
+        val extrArr = Generic.get(theMap, "phases.pre_build.commands") as ArrayList<*>
+        extrArr.forEachIndexed { index, any ->  println("${index + 1}: $any") }
+
+        val extrObj = Generic.get(theMap, ".phases.build") as MutableMap<*, *>
+        println("\nextrObj: $extrObj")
+
+        println("finished")
     }
 }

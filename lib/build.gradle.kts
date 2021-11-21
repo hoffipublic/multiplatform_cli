@@ -51,6 +51,7 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Deps.Misc.KOTLINXJSON.VERSION}")
                 //implementation("com.charleskorn.kaml:kaml:${Deps.Misc.KOTLINXYAML.VERSION}")
                 implementation("net.mamoe.yamlkt:yamlkt:${Deps.Misc.KOTLINXYAMLKT.VERSION}")
+                implementation("com.squareup.okio:okio:${Deps.Squareup.OKIO.VERSION}")
             }
         }
         val commonTest by getting {
