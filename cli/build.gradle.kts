@@ -29,20 +29,20 @@ kotlin {
         //    }
         //}
     }
-    macosX64("mac") { // without name param, creates sourceSet named("macosX64Main") and named("macosX64Main")
-        // linuxX64("linux") // on Linux
-        // mingwX64("windows") // on Windows
-        binaries {
-            executable {
-                // entry point function = package with non-inside-object main method + ".main" (= name of the main function)
-                entryPoint(theMainClass.replaceAfterLast(".", "main"))
-                //runTask?.args("")
-                // Use the following Gradle tasks to run your application:
-                // (<subproject>):runReleaseExecutableMacos - without debug symbols
-                // (<subproject>):runDebugExecutableMacos - with debug symbols
-            }
-        }
-    }
+//    macosX64("mac") { // without name param, creates sourceSet named("macosX64Main") and named("macosX64Main")
+//        // linuxX64("linux") // on Linux
+//        // mingwX64("windows") // on Windows
+//        binaries {
+//            executable {
+//                // entry point function = package with non-inside-object main method + ".main" (= name of the main function)
+//                entryPoint(theMainClass.replaceAfterLast(".", "main"))
+//                //runTask?.args("")
+//                // Use the following Gradle tasks to run your application:
+//                // (<subproject>):runReleaseExecutableMacos - without debug symbols
+//                // (<subproject>):runDebugExecutableMacos - with debug symbols
+//            }
+//        }
+//    }
     linuxX64("unix") { // without name param, creates sourceSet named("macosX64Main") and named("macosX64Main")
         // linuxX64("linux") // on Linux
         // mingwX64("windows") // on Windows
@@ -66,15 +66,15 @@ kotlin {
         val commonMain by getting  { // predefined by gradle multiplatform plugin
             dependencies {
                 implementation(project(":lib"))
-                implementation("io.github.microutils:kotlin-logging:${Deps.Logging.kotlinLogging_VERSION}")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Deps.Misc.DATETIME.VERSION}")
+                implementation("io.github.microutils:kotlin-logging:2.1.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Deps.Misc.KotlinxDatetime.version}")
                 //api(platform("com.squareup.okio:okio-bom:3.0.0"))
-                implementation("com.squareup.okio:okio:${Deps.Squareup.OKIO.VERSION}")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Deps.Misc.KOTLINXJSON.VERSION}")
+                implementation("com.squareup.okio:okio:${Deps.Squareup.Okio.version}")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Deps.Serialization.KotlinxJson.version}")
                 //implementation("com.charleskorn.kaml:kaml:${Deps.Misc.KOTLINXYAML.VERSION}")
-                implementation("net.mamoe.yamlkt:yamlkt:${Deps.Misc.KOTLINXYAMLKT.VERSION}")
+                implementation("net.mamoe.yamlkt:yamlkt:${Deps.Serialization.KotlinxYaml.version}")
 
-                implementation("com.github.ajalt.clikt:clikt:${Deps.Misc.CLIKT.VERSION}")
+                implementation("com.github.ajalt.clikt:clikt:${Deps.Misc.Clikt.version}")
             }
         }
         val commonTest by getting {
@@ -86,7 +86,7 @@ kotlin {
             //print("${name} dependsOn: ")
             //println(dependsOn.map { it.name }.joinToString())
             dependencies {
-                implementation("ch.qos.logback:logback-classic:${Deps.Logging.logbackVersion}")
+                implementation("ch.qos.logback:logback-classic:${Deps.Logging.Logback.version}")
                 //implementation("org.slf4j:slf4j-api:1.7.30")
             }
         }
@@ -98,16 +98,16 @@ kotlin {
             }
         }
 
-        val macMain by getting { // named("macMain") {
-            dependencies {
-
-            }
-        }
-        val macTest by getting { // named("macTest") {
-            dependencies {
-
-            }
-        }
+//        val macMain by getting { // named("macMain") {
+//            dependencies {
+//
+//            }
+//        }
+//        val macTest by getting { // named("macTest") {
+//            dependencies {
+//
+//            }
+//        }
     }
 }
 

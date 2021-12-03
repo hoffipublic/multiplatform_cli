@@ -36,8 +36,8 @@ kotlin {
     // }
     if (hostOs == "Mac OS X" || hostOs == "Linux" ) {
         posixHost = true
-        macosX64()
-        linuxX64()
+//        macosX64()
+//        linuxX64()
     } else if (hostOs.startsWith("Windows")) {
         windowsHost = true
         mingwX64()
@@ -46,12 +46,12 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("io.github.microutils:kotlin-logging:${Deps.Logging.kotlinLogging_VERSION}")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Deps.Misc.DATETIME.VERSION}")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Deps.Misc.KOTLINXJSON.VERSION}")
+                implementation("io.github.microutils:kotlin-logging:2.1.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Deps.Misc.KotlinxDatetime.version}")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Deps.Serialization.KotlinxJson.version}")
                 //implementation("com.charleskorn.kaml:kaml:${Deps.Misc.KOTLINXYAML.VERSION}")
-                implementation("net.mamoe.yamlkt:yamlkt:${Deps.Misc.KOTLINXYAMLKT.VERSION}")
-                implementation("com.squareup.okio:okio:${Deps.Squareup.OKIO.VERSION}")
+                implementation("net.mamoe.yamlkt:yamlkt:${Deps.Serialization.KotlinxYaml.version}")
+                implementation("com.squareup.okio:okio:${Deps.Squareup.Okio.version}")
             }
         }
         val commonTest by getting {
@@ -62,7 +62,7 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
-                implementation("ch.qos.logback:logback-classic:${Deps.Logging.logbackVersion}")
+                implementation("ch.qos.logback:logback-classic:${Deps.Logging.Logback.version}")
             }
         }
         val jvmTest by getting {
@@ -70,21 +70,21 @@ kotlin {
                 implementation(kotlin("test-junit"))
             }
         }
-        if (posixHost) {
-            val macosX64Main by getting {
-                dependencies {
-                }
-            }
-            val linuxX64Main by getting {
-                dependencies {
-                }
-            }
-        }
-        if (windowsHost) {
-            val mingwX64Main by getting {
-                dependencies {
-                }
-            }
-        }
+//        if (posixHost) {
+//            val macosX64Main by getting {
+//                dependencies {
+//                }
+//            }
+//            val linuxX64Main by getting {
+//                dependencies {
+//                }
+//            }
+//        }
+//        if (windowsHost) {
+//            val mingwX64Main by getting {
+//                dependencies {
+//                }
+//            }
+//        }
     }
 }

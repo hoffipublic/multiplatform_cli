@@ -17,7 +17,15 @@ for syncfilepath in $SYNCDIR/* ; do
     if cmp --silent $syncfilepath $localfilepath ; then
         echo -e "${filename} is ${colGreen}equal${colReset}";
     else
-        echo -e "opendiff ./buildSrc/$OFFSET/$filename  $SYNCDIR_display/$OFFSET/$filename -merge ./buildSrc/$OFFSET/$filename"
-        /usr/bin/opendiff "${localfilepath}" "${syncfilepath}" -merge "$localfilepath"
+        if [[ -n "$IS_WSL" || -n "$WSL_DISTRO_NAME" ]]; then
+            echo -e "winmerge ./buildSrc/$OFFSET/$filename  $SYNCDIR_display/$OFFSET/$filename"
+            "/mnt/c/Program Files/WinMerge/WinMergeU.exe" "$(wslpath -aw "${localfilepath}")" "$(wslpath -aw "${syncfilepath}")"
+        elif [[  "$OSTYPE" = "msys" ]]; then
+            echo -e "winmerge ./buildSrc/$OFFSET/$filename  $SYNCDIR_display/$OFFSET/$filename"
+            /usr/bin/opendiff "${localfilepath}" "${syncfilepath}" -merge "$localfilepath"
+        else
+            echo -e "opendiff ./buildSrc/$OFFSET/$filename  $SYNCDIR_display/$OFFSET/$filename -merge ./buildSrc/$OFFSET/$filename"
+            /usr/bin/opendiff "${localfilepath}" "${syncfilepath}" -merge "$localfilepath"
+        fi
     fi
 done
