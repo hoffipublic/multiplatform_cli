@@ -62,7 +62,7 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
-                implementation("ch.qos.logback:logback-classic:${Deps.Logging.Logback.version}")
+                runtimeOnly("ch.qos.logback:logback-classic") { version { strictly(Deps.Logging.Logback.version) } }
             }
         }
         val jvmTest by getting {

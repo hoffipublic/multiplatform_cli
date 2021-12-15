@@ -86,7 +86,7 @@ kotlin {
             //print("${name} dependsOn: ")
             //println(dependsOn.map { it.name }.joinToString())
             dependencies {
-                implementation("ch.qos.logback:logback-classic:${Deps.Logging.Logback.version}")
+                runtimeOnly("ch.qos.logback:logback-classic") { version { strictly(Deps.Logging.Logback.version) } }
                 //implementation("org.slf4j:slf4j-api:1.7.30")
             }
         }
