@@ -11,52 +11,55 @@ val artifactName by extra { "${rootProject.name.toLowerCase()}-${project.name.to
 val theMainClass by extra { "com.hoffi.mpp.cli.AppKt" }
 
 kotlin {
+    val hostOs = System.getProperty("os.name")
+    var posixHost = false
+    var windowsHost = false
+    val isMingwX64 = hostOs.startsWith("Windows")
+//    val nativeTarget = when {
+//        hostOs == "Mac OS X" -> macosX64("native")
+//        hostOs == "Linux" -> linuxX64("native")
+//        isMingwX64 -> mingwX64("native")
+//        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
+//    }
+    when {
+        hostOs == "Mac OS X" -> println("-> detected Mac OS X host system")
+        hostOs == "Linux" -> println("-> detected Linux host system")
+        isMingwX64 -> println("-> detected Windows (Mingw) host system")
+        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
+    }
     jvm {
-        //withJava() // applies the Gradle java plugin to allow the multiplatform project to have both Java and Kotlin source files (src/jvmMain/java/...)
 
-       // tasks.withType<Jar> {
-       //     archiveBaseName.set(project.name.toLowerCase())
-       // }
-
-        // create an executable java fat jar
-        //val jvmJar by tasks.getting(org.gradle.jvm.tasks.Jar::class) {
-        //    doFirst {
-        //        // configurations.forEach { println(it.name) }
-        //        manifest {
-        //            attributes["Main-Class"] = theMainClass
-        //        }
-        //        from(configurations.getByName("jvmRuntimeClasspath").map { if (it.isDirectory) it else zipTree(it) })
-        //    }
-        //}
     }
-    macosX64("mac") { // without name param, creates sourceSet named("macosX64Main") and named("macosX64Main")
-        // linuxX64("linux") // on Linux
-        // mingwX64("windows") // on Windows
-        binaries {
-            executable {
-                // entry point function = package with non-inside-object main method + ".main" (= name of the main function)
-                entryPoint(theMainClass.replaceAfterLast(".", "main"))
-                //runTask?.args("")
-                // Use the following Gradle tasks to run your application:
-                // (<subproject>):runReleaseExecutableMacos - without debug symbols
-                // (<subproject>):runDebugExecutableMacos - with debug symbols
+    if (hostOs == "Mac OS X" || hostOs == "Linux" ) {
+        posixHost = true
+        macosX64() {
+            binaries {
+                executable {
+                    // entry point function = package with non-inside-object main method + ".main" (= name of the main function)
+                    entryPoint(theMainClass.replaceAfterLast(".", "main"))
+                }
             }
         }
-    }
-    linuxX64("unix") { // without name param, creates sourceSet named("macosX64Main") and named("macosX64Main")
-        // linuxX64("linux") // on Linux
-        // mingwX64("windows") // on Windows
-        binaries {
-            executable {
-                // entry point function = package with non-inside-object main method + ".main" (= name of the main function)
-                entryPoint(theMainClass.replaceAfterLast(".", "main"))
-                //runTask?.args("")
-                // Use the following Gradle tasks to run your application:
-                // (<subproject>):runReleaseExecutableMacos - without debug symbols
-                // (<subproject>):runDebugExecutableMacos - with debug symbols
+        linuxX64() {
+            binaries {
+                executable {
+                    // entry point function = package with non-inside-object main method + ".main" (= name of the main function)
+                    entryPoint(theMainClass.replaceAfterLast(".", "main"))
+                }
             }
         }
-    }
+    } else if (hostOs.startsWith("Windows")) {
+        windowsHost = true
+        mingwX64() {
+            binaries {
+                executable {
+                    // entry point function = package with non-inside-object main method + ".main" (= name of the main function)
+                    entryPoint(theMainClass.replaceAfterLast(".", "main"))
+                }
+            }
+        }
+    } else throw GradleException("Host OS is not supported in Kotlin/Native.")
+
 
     // https://kotlinlang.org/docs/mpp-share-on-platforms.html#share-code-in-libraries
     // To enable usage of platform-dependent libraries in shared source sets, add the following to your `gradle.properties`
@@ -98,12 +101,12 @@ kotlin {
             }
         }
 
-//        val macMain by getting { // named("macMain") {
+//        val macosX64Main by getting { // named("macMain") {
 //            dependencies {
 //
 //            }
 //        }
-//        val macTest by getting { // named("macTest") {
+//        val macosX64Test by getting { // named("macTest") {
 //            dependencies {
 //
 //            }
