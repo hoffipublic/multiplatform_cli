@@ -9,45 +9,45 @@ object Deps {
 
 
     object Plugins {
-        val Micronaut = DepPlugin("Micronaut", "io.micronaut.application", VERSION ="2.0.7").also { it.add() }
-        val Shadow = DepPlugin("Shadow", "com.github.johnrengelman.shadow", VERSION = "7.1.0").also { it.add() }
+        val Micronaut = DepPlugin("Micronaut", "io.micronaut.application", VERSION ="3.1.0").also { it.add() }
+        val Shadow = DepPlugin("Shadow", "com.github.johnrengelman.shadow", VERSION = "7.1.1").also { it.add() }
     }
 
     object Tests {
         var VERSION_Junit = UNSPECIFIED
-        val Junit = Dep.from("org.junit.jupiter:junit-jupiter-api:5.7.0").also { VERSION_Junit = it.version ; it.add() }
+        val Junit = Dep.from("org.junit.jupiter:junit-jupiter-api:5.8.2").also { VERSION_Junit = it.version ; it.add() }
         val JunitEngine = Dep.from("org.junit.jupiter:junit-jupiter-engine:$VERSION_Junit")
 
         val hamcrestLibrary = Dep.from("org.hamcrest:hamcrest-library:2.2").also { it.add() }
-        val Kotest = Dep.from("io.kotest:kotest-runner-junit5-jvm:4.6.3").also { it.add() }
+        val Kotest = Dep.from("io.kotest:kotest-runner-junit5-jvm:5.0.3").also { it.add() }
     }
 
     object JetBrains {
         var VERSION_Kotlin = UNSPECIFIED
-        val Kotlin = Dep.from("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31").also { VERSION_Kotlin = it.version ; it.add() }
+        val Kotlin = Dep.from("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10").also { VERSION_Kotlin = it.version ; it.add() }
         val KotlinTestCommon = Dep.from("org.jetbrains.kotlin:kotlin-test-common:$VERSION_Kotlin")
         val KotlinTestJunit = Dep.from("org.jetbrains.kotlin:kotlin-test-junit:$VERSION_Kotlin")
         val KotlinTestAnnotationsCommon = Dep.from("org.jetbrains.kotlin:kotlin-test-annotations-common:$VERSION_Kotlin")
 
         // __LATEST_COMPOSE_RELEASE_VERSION__
         // https://github.com/JetBrains/compose-jb/releases
-        val Compose = Dep.from("org.jetbrains.compose:compose-gradle-plugin:1.0.0-beta1", repo = JETBRAINS).also { it.add() }
+        val Compose = Dep.from("org.jetbrains.compose:compose-gradle-plugin:1.0.0", repo = JETBRAINS).also { it.add() }
 
-        val Exposed = Dep.from("org.jetbrains.exposed:exposed-core:0.35.3").also { it.add() }
+        val Exposed = Dep.from("org.jetbrains.exposed:exposed-core:0.36.2").also { it.add() }
     }
 
     object Core {
-        val Arrow  = Dep.from("io.arrow-kt:arrow-core:1.0.0").also { it.add() }
+        val Arrow  = Dep.from("io.arrow-kt:arrow-core:1.0.1").also { it.add() }
     }
 
     object Micronaut {
         var VERSION_Micronaut = UNSPECIFIED
-        val Bom = Dep.from("io.micronaut:micronaut-bom:3.1.1").also { VERSION_Micronaut = it.version ; it.add() }
+        val Bom = Dep.from("io.micronaut:micronaut-bom:3.2.3").also { VERSION_Micronaut = it.version ; it.add() }
     }
 
     object DB {
-        val Postgresql = Dep.from("org.postgresql:postgresql:42.3.0", versionRegex = "${THREEDIGITSs}\\.jre\\d*\$").also { it.add() }
-        val H2 = Dep.from("com.h2database:h2:1.4.200").also { it.add() }
+        val Postgresql = Dep.from("org.postgresql:postgresql:42.3.1", versionRegex = "${THREEDIGITSs}\\.jre\\d*\$").also { it.add() }
+        val H2 = Dep.from("com.h2database:h2:2.0.202").also { it.add() }
     }
 
     object Apache {
@@ -61,9 +61,10 @@ object Deps {
 
     object Logging {
         var VERSION_Logback = UNSPECIFIED
-        val Logback = Dep.from("ch.qos.logback:logback-classic:1.2.6").also { VERSION_Logback = it.version ; it.add() }
+        val Logback = Dep.from("ch.qos.logback:logback-classic:1.2.9").also { VERSION_Logback = it.version ; it.add() }
         var VERSION_Slf4j = UNSPECIFIED
         val Slf4jApi = Dep.from("org.slf4j:slf4j-api:1.7.32").also { VERSION_Slf4j = it.version ; it.add() }
+        val KotlinLogging = Dep.from("io.github.microutils:kotlin-logging:2.1.21").also { it.add() }
 
     }
 
@@ -76,19 +77,19 @@ object Deps {
 
     object Web {
         var VERSION_Ktor = UNSPECIFIED
-        val Ktor = Dep.from("io.ktor:ktor-server-core:1.6.6").also { VERSION_Ktor = it.version ; it.add() }
+        val Ktor = Dep.from("io.ktor:ktor-server-core:1.6.7").also { VERSION_Ktor = it.version ; it.add() }
         val Khttp = Dep.from("khttp:khttp:1.0.0", JCENTER).also { it.add() }
-        val Sslcontext = Dep.from("io.github.hakky54:sslcontext-kickstart:7.0.3").also { it.add() }
-        val jsoup = Dep.from("org.jsoup:jsoup:1.13.1").also { it.add() }
+        val Sslcontext = Dep.from("io.github.hakky54:sslcontext-kickstart:7.1.0").also { it.add() }
+        val jsoup = Dep.from("org.jsoup:jsoup:1.14.3").also { it.add() }
     }
 
     object Squareup {
-        val Okhttp = Dep.from("com.squareup.okhttp3:okhttp:4.9.2").also { it.add() }
+        val Okhttp = Dep.from("com.squareup.okhttp3:okhttp:4.9.3").also { it.add() }
         val Retrofit = Dep.from("com.squareup.retrofit2:retrofit:2.9.0").also { it.add() }
-        val Moshi = Dep.from("com.squareup.moshi:moshi-kotlin:1.12.0").also { it.add() }
-        val Okio = Dep.from("com.squareup.okio:okio:2.10.0").also { it.add() }
+        val Moshi = Dep.from("com.squareup.moshi:moshi-kotlin:1.13.0").also { it.add() }
+        val Okio = Dep.from("com.squareup.okio:okio:3.0.0").also { it.add() }
         var VERSION_SQLDelight = UNSPECIFIED
-        val SQLDelight = Dep.from("com.squareup.sqldelight:gradle-plugin:1.4.4").also { VERSION_SQLDelight = it.version ; it.add() }
+        val SQLDelight = Dep.from("com.squareup.sqldelight:gradle-plugin:1.5.3").also { VERSION_SQLDelight = it.version ; it.add() }
         val androidDriver = Dep.from("com.squareup.sqldelight:android-driver:$VERSION_SQLDelight")
         val sqliteDriver = Dep.from("com.squareup.sqldelight:sqlite-driver:$VERSION_SQLDelight")
         val nativeDriver = Dep.from("com.squareup.sqldelight:native-driver:$VERSION_SQLDelight")
@@ -101,18 +102,18 @@ object Deps {
     }
     object Serialization {
         val KotlinxJson = Dep.from("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1").also { it.add() }
-        val KotlinxYaml = Dep.from("net.mamoe.yamlkt:yamlkt:0.10.0").also { it.add() }
-        val KotlinxKaml = Dep.from("com.charleskorn.kaml:kaml:0.36.0").also { it.add() }
-        val Snakeyaml = Dep.from("org.yaml:snakeyaml:1.29").also { it.add() }
+        val KotlinxYaml = Dep.from("net.mamoe.yamlkt:yamlkt:0.10.2").also { it.add() }
+        val KotlinxKaml = Dep.from("com.charleskorn.kaml:kaml:0.38.0").also { it.add() }
+        val Snakeyaml = Dep.from("org.yaml:snakeyaml:1.30").also { it.add() }
     }
 
     object Android {
-        val Tools = Dep.from("com.android.tools.build:gradle:4.1.2", GOOGLE).also { it.add() }
+        val Tools = Dep.from("com.android.tools.build:gradle:7.0.0", GOOGLE).also { it.add() }
     }
 
     object AndroidX {
         val AppCompatUrl = java.net.URI("https://maven.google.com/web/index.html?q=androidx.appco#androidx.appcompat:appcompat")
-        val AppCompat = Dep.from("androidx.appcompat:appcompat:1.2.0").also { it.add() }
+        val AppCompat = Dep.from("androidx.appcompat:appcompat:1.4.0").also { it.add() }
     }
 
     object ArkIvanov {
@@ -135,7 +136,7 @@ object Deps {
 
     object Badoo {
         var VERSION_Badoo = UNSPECIFIED
-        val Reaktive = Dep.from("com.badoo.reaktive:reaktive:1.1.19").also { VERSION_Badoo = it.version ; it.add() }
+        val Reaktive = Dep.from("com.badoo.reaktive:reaktive:1.2.1").also { VERSION_Badoo = it.version ; it.add() }
         val ReaktiveTesting = Dep.from("com.badoo.reaktive:reaktive-testing:$VERSION_Badoo")
         val utils = Dep.from("com.badoo.reaktive:utils:$VERSION_Badoo")
         val coroutinesInterop = Dep.from("com.badoo.reaktive:coroutines-interop:$VERSION_Badoo")

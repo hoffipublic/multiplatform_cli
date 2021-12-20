@@ -10,10 +10,10 @@ repositories {
     mavenCentral()
 }
 
-// Kotlin compilation tasks will also use this
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
+kotlin {
+    jvmToolchain {
+        (this as JavaToolchainSpec).languageVersion.set(JavaLanguageVersion.of(11))
+        vendor.set(JvmVendorSpec.ADOPTOPENJDK)
     }
 }
 
@@ -27,17 +27,17 @@ kotlin {
     val hostOs = System.getProperty("os.name")
     var posixHost = false
     var windowsHost = false
-    // val isMingwX64 = hostOs.startsWith("Windows")
-    // val nativeTarget = when {
-    //     hostOs == "Mac OS X" -> macosX64("native")
-    //     hostOs == "Linux" -> linuxX64("native")
-    //     isMingwX64 -> mingwX64("native")
-    //     else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
-    // }
+    val isMingwX64 = hostOs.startsWith("Windows")
+//    val nativeTarget = when {
+//        hostOs == "Mac OS X" -> macosX64("native")
+//        hostOs == "Linux" -> linuxX64("native")
+//        isMingwX64 -> mingwX64("native")
+//        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
+//    }
     if (hostOs == "Mac OS X" || hostOs == "Linux" ) {
         posixHost = true
-//        macosX64()
-//        linuxX64()
+        macosX64()
+        linuxX64()
     } else if (hostOs.startsWith("Windows")) {
         windowsHost = true
         mingwX64()
@@ -46,7 +46,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("io.github.microutils:kotlin-logging:2.1.0")
+                implementation("io.github.microutils:kotlin-logging:${Deps.Logging.KotlinLogging.version}")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Deps.Misc.KotlinxDatetime.version}")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Deps.Serialization.KotlinxJson.version}")
                 //implementation("com.charleskorn.kaml:kaml:${Deps.Misc.KOTLINXYAML.VERSION}")
