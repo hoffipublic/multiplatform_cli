@@ -16,7 +16,7 @@ open class CheckVersionsTask : DefaultTask() {
         }
         println("actually used dependencies to check: ${Deps.APPLIED_DEPS.flatMap { it.value }.size}")
         for (depEntries in Deps.APPLIED_DEPS) {
-            println("$depEntries.key:")
+            println("${depEntries.key}:")
             for (dep in depEntries.value) {
                 try {
                     val text = dep.mavenMetadataXmlURL().readText()
@@ -30,7 +30,7 @@ open class CheckVersionsTask : DefaultTask() {
                         ! it.contains(Regex("(alpha|beta|\\d\\d\\d\\d-\\d\\d-\\d\\d)"))
                     }
 
-                    print(String.format("%-15s: %-29s current: %-16s", dep, dep.name, dep.version))
+                    print(String.format("  %-20s current: %-14s", dep.artifact, dep.version))
                     var latest = "not found"
                     var release = "not found"
                     if(latestMatchResult != null) latest = latestMatchResult.groupValues[1]
@@ -39,11 +39,11 @@ open class CheckVersionsTask : DefaultTask() {
                     if(dep.checkVersion(release) || dep.checkVersion(lastVersion))  {
                         print(" UP-TO-DATE")
                     } else {
-                        print(String.format(" latest: %-19s release: %-19s lastVersionRef: %-19s (%s)", latest.take(19), release.take(19), lastVersion, dep.mavenMetadataXmlURL()))
+                        print(String.format(" latest: %-15s release: %-15s lastVersionRef: %-15s\n    %s", latest.take(19), release.take(19), lastVersion, dep.mavenMetadataXmlURL()))
                     }
                     //print("    ${depLeader.mavenMetadataXMLURL}")
                 } catch(ex : Exception) {
-                    println(String.format("%-15s: %-29s current: %-16s  remote URL error", dep, dep.name, dep.version))
+                    println(String.format("%-15s: %-29s current: %-16s  remote URL error", dep, dep.artifact, dep.version))
                     print(" tried: ${dep.mavenMetadataXmlURL()}")
                 }
                 println("")
