@@ -12,36 +12,22 @@ repositories {
 
 kotlin {
     jvmToolchain {
-        (this as JavaToolchainSpec).languageVersion.set(JavaLanguageVersion.of(11))
-        vendor.set(JvmVendorSpec.ADOPTOPENJDK)
+        val javaVersion: JavaLanguageVersion by rootProject.extra
+        (this as JavaToolchainSpec).languageVersion.set(javaVersion)
+        //vendor.set(JvmVendorSpec.ADOPTOPENJDK)
     }
-}
-
-
-kotlin {
     jvm {
         testRuns["test"].executionTask.configure {
             useJUnit()
         }
     }
-    val hostOs = System.getProperty("os.name")
-    var posixHost = false
-    var windowsHost = false
-    val isMingwX64 = hostOs.startsWith("Windows")
-//    val nativeTarget = when {
-//        hostOs == "Mac OS X" -> macosX64("native")
-//        hostOs == "Linux" -> linuxX64("native")
-//        isMingwX64 -> mingwX64("native")
-//        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
-//    }
-    if (hostOs == "Mac OS X" || hostOs == "Linux" ) {
-        posixHost = true
-        macosX64()
-        linuxX64()
-    } else if (hostOs.startsWith("Windows")) {
-        windowsHost = true
-        mingwX64()
-    } else throw GradleException("Host OS is not supported in Kotlin/Native.")
+    val hostOS: String by rootProject.extra
+    when (hostOS) {
+        "MAC" -> macosX64()
+        "LINUX" -> linuxX64()
+        "WINDOWS" -> mingwX64()
+        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
+    }
 
     sourceSets {
         val commonMain by getting {
@@ -70,21 +56,20 @@ kotlin {
                 implementation(kotlin("test-junit"))
             }
         }
-//        if (posixHost) {
-//            val macosX64Main by getting {
-//                dependencies {
-//                }
-//            }
-//            val linuxX64Main by getting {
-//                dependencies {
-//                }
-//            }
-//        }
-//        if (windowsHost) {
-//            val mingwX64Main by getting {
-//                dependencies {
-//                }
-//            }
-//        }
+        when (hostOS) {
+            "MAC" -> {
+                val macosX64Main by getting {
+                    dependencies {
+                    }}}
+            "LINUX" -> {
+                val linuxX64Main by getting {
+                    dependencies {
+                    }}}
+            "WINDOWS" -> {
+                val mingwX64Main by getting {
+                    dependencies {
+                    }}}
+            else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
+        }
     }
 }

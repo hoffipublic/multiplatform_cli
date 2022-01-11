@@ -8,13 +8,13 @@ import com.github.ajalt.clikt.parameters.types.int
 import com.hoffi.mpp.cli.filesystem.fileSystem
 import com.hoffi.mpp.cli.mappings.Buildspec
 import com.hoffi.mpp.cli.mappings.Nested
+import com.hoffi.mpp.common.io.json.Generic
+import com.hoffi.mpp.common.io.json.Pretty
+import com.hoffi.mpp.common.io.json.collapseParentheses
 import com.hoffi.mpp.common.io.mpp.Console
 import com.hoffi.mpp.common.io.mpp.MppProcess
 import com.hoffi.mpp.common.io.mpp.ProcessResult
 import com.hoffi.mpp.common.io.mpp.executeCommand
-import com.hoffi.mpp.common.io.mpp.json.Generic
-import com.hoffi.mpp.common.io.mpp.json.Pretty
-import com.hoffi.mpp.common.io.mpp.json.collapseParenthesises
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import mu.KotlinLogging
@@ -107,10 +107,10 @@ class App : CliktCommand() {
         println(json)
 
         println("\n\n===manually collapsed:")
-        println(json.collapseParenthesises())
+        println(json.collapseParentheses())
 
         println("\n\n=== collapsed pretty:")
-        json = Pretty.JSON.encodeToString(buildspec).collapseParenthesises()
+        json = Pretty.JSON.encodeToString(buildspec).collapseParentheses()
         println(json)
 
 
@@ -123,7 +123,7 @@ class App : CliktCommand() {
         var s = Pretty.JSON.encodeToString(nested)
         println(s)
         println("\n\n==== complex encodeToString collapsed:")
-        s = s.collapseParenthesises()
+        s = s.collapseParentheses()
         println(s)
 
         println("\n\n=== parseToJsonElement:")

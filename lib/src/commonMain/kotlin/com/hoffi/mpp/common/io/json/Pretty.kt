@@ -1,18 +1,19 @@
-package com.hoffi.mpp.common.io.mpp.json
+package com.hoffi.mpp.common.io.json
 
 import kotlinx.serialization.json.Json
 
-val RElinebreak = "\\R"
-val REparClose = "[})\\]]"
-val REparOpen = "[{(\\[]"
+//const val RElinebreak = "\\R"
+const val REParOpen = "[{(\\[]"
+const val REParClos = "[})\\]]"
+val RECombineParsOpen = Regex("(?<=$REParOpen)\\s*\\R\\s*(?=$REParOpen)", RegexOption.MULTILINE)
+val RECombineParsClos = Regex("(?<=$REParClos)\\s*\\R\\s*(?=$REParClos)", RegexOption.MULTILINE)
+val RECompressCurlies = Regex("},\\s*\\R\\s+\\{", RegexOption.MULTILINE)
 
-fun String.collapseParenthesises(): String {
+fun String.collapseParentheses(): String {
     var s = this
-    s = s.replace("(?<=${REparOpen})\\s*\\R\\s*(?=${REparOpen})".toRegex(RegexOption.MULTILINE), "") // combine opening parenthesises
-    // s = s.replace("(?<=${REhelper.parOpen})\\s(?=${REhelper.parClose})".toRegex(RegexOption.MULTILINE), "") // compact opening parenthesises
-    s = s.replace("(?<=${REparClose})\\s*\\R\\s*(?=${REparClose})".toRegex(RegexOption.MULTILINE), "") // same on closing
-    // s = s.replace("(?<=${REhelper.parClose})\\s(?=${REhelper.parClose})".toRegex(RegexOption.MULTILINE), "") // same on closing
-    s = s.replace("},\\s*\\R\\s+\\{".toRegex(RegexOption.MULTILINE), "},{")
+    s = s.replace(RECombineParsOpen, "") // combine opening parenthesises on separate lines
+    s = s.replace(RECombineParsClos, "") // same on closing ones
+    s = s.replace(RECompressCurlies, "},{")
     return s
 }
 object Pretty {

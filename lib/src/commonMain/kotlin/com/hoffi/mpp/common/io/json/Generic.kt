@@ -1,4 +1,4 @@
-package com.hoffi.mpp.common.io.mpp.json
+package com.hoffi.mpp.common.io.json
 
 import kotlinx.serialization.json.*
 
