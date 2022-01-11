@@ -47,7 +47,7 @@ kotlin {
                 }
             }
         }
-        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
+        else -> throw GradleException("Host OS is not supported in Kotlin/Native: $hostOS from '${System.getProperty("os.name")}'")
     }
     sourceSets {
         val commonMain by getting  { // predefined by gradle multiplatform plugin

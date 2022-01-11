@@ -26,7 +26,7 @@ kotlin {
         "MAC" -> macosX64()
         "LINUX" -> linuxX64()
         "WINDOWS" -> mingwX64()
-        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
+        else -> throw GradleException("Host OS is not supported in Kotlin/Native: $hostOS from '${System.getProperty("os.name")}'")
     }
 
     sourceSets {
