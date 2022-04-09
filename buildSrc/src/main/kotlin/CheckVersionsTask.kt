@@ -1,10 +1,10 @@
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
-/** only dependencies that are actually used are checked, otherwise the `.also { DEPS_TO_CHECK["xxx"] = it }` clause won't be executed */
 open class CheckVersionsTask : DefaultTask() {
-//    @Input
-//    lateinit var some: String
+    @Input
+    var scope: String = "default"
 
     @TaskAction
     fun checkDepVersions() {
@@ -14,8 +14,13 @@ open class CheckVersionsTask : DefaultTask() {
         if (gradleShellVersion != "not installed locally") {
             if (gradleShellVersion != gradlewVersion) println("mismatch: gradle shell ${gradleShellVersion}\nvs local wrapper $gradlewVersion")
         }
-        println("actually used dependencies to check: ${Deps.APPLIED_DEPS.flatMap { it.value }.size}")
-        for (depEntries in Deps.APPLIED_DEPS) {
+        val depsToCheck = if (scope.equals("ALL", ignoreCase = true)) {
+            Deps.ALL
+        } else {
+            Deps.USED
+        }
+        println("dependencies to check: ${depsToCheck.flatMap { it.value }.size}")
+        for (depEntries in depsToCheck) {
             println("${depEntries.key}:")
             for (dep in depEntries.value) {
                 try {
@@ -50,8 +55,13 @@ open class CheckVersionsTask : DefaultTask() {
             }
         }
 
+        val pluginsToCheck = if (scope.equals("ALL", ignoreCase = true)) {
+            PluginDeps.ALL
+        } else {
+            PluginDeps.USED
+        }
         println("\nGradle Plugins:\n===============")
-        for(depPlugin in Deps.APPLIED_PLUGINS) {
+        for(depPlugin in pluginsToCheck) {
             val regexLatest = Regex("Version (.*) \\(latest\\)", setOf(RegexOption.MULTILINE, RegexOption.UNIX_LINES))
             val url = "https://plugins.gradle.org/plugin/${depPlugin.id}"
             val text = java.net.URL(url).readText()
@@ -59,8 +69,8 @@ open class CheckVersionsTask : DefaultTask() {
             val latestMatchResult = regexLatest.find(text)
             var latest = "not found"
             if(latestMatchResult != null) latest = latestMatchResult.groupValues[1]
-            print(String.format("%-29s: current: %-19s", depPlugin.name, depPlugin.VERSION))
-            if(depPlugin.VERSION == latest) {
+            print(String.format("%-29s: current: %-19s", depPlugin.name, depPlugin.version))
+            if(depPlugin.version == latest) {
                 print(" up-to-date")
             } else {
                 print(String.format(" latest: %-19s", latest))

@@ -14,7 +14,7 @@ kotlin {
     jvmToolchain {
         val javaVersion: JavaLanguageVersion by rootProject.extra
         (this as JavaToolchainSpec).languageVersion.set(javaVersion)
-        //vendor.set(JvmVendorSpec.ADOPTOPENJDK)
+        vendor.set(JvmVendorSpec.ADOPTIUM)
     }
     jvm {
         testRuns["test"].executionTask.configure {
@@ -32,12 +32,12 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("io.github.microutils:kotlin-logging:${Deps.Logging.KotlinLogging.version}")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Deps.Misc.KotlinxDatetime.version}")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Deps.Serialization.KotlinxJson.version}")
+                implementation("io.github.microutils:kotlin-logging:${Deps.KotlinLogging.version}")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Deps.KotlinxDatetime.version}")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Deps.KotlinxJson.version}")
                 //implementation("com.charleskorn.kaml:kaml:${Deps.Misc.KOTLINXYAML.VERSION}")
-                implementation("net.mamoe.yamlkt:yamlkt:${Deps.Serialization.KotlinxYaml.version}")
-                implementation("com.squareup.okio:okio:${Deps.Squareup.Okio.version}")
+                implementation("net.mamoe.yamlkt:yamlkt:${Deps.KotlinxYaml.version}")
+                implementation("com.squareup.okio:okio:${Deps.Okio.version}")
             }
         }
         val commonTest by getting {
@@ -48,7 +48,7 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
-                runtimeOnly("ch.qos.logback:logback-classic") { version { strictly(Deps.Logging.Logback.version) } }
+                runtimeOnly("ch.qos.logback:logback-classic") { version { strictly(Deps.Logback.version) } }
             }
         }
         val jvmTest by getting {

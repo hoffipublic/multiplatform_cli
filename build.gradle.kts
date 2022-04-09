@@ -1,12 +1,12 @@
 plugins {
     // `kotlin-dsl`
     id("java")
-    kotlin("jvm") version Deps.JetBrains.VERSION_Kotlin apply false
-    kotlin("multiplatform") version Deps.JetBrains.VERSION_Kotlin apply false
-    kotlin("plugin.serialization") version Deps.JetBrains.VERSION_Kotlin apply false
-    kotlin("kapt") version Deps.JetBrains.VERSION_Kotlin apply false
-    kotlin("plugin.allopen") version Deps.JetBrains.VERSION_Kotlin apply false
-    id("com.github.johnrengelman.shadow") version Deps.Plugins.Shadow.VERSION apply false
+    kotlin("jvm") version BuildSrcGlobal.VersionKotlin apply false
+    kotlin("multiplatform") version BuildSrcGlobal.VersionKotlin apply false
+    kotlin("plugin.serialization") version BuildSrcGlobal.VersionKotlin apply false
+    kotlin("kapt") version BuildSrcGlobal.VersionKotlin apply false
+    kotlin("plugin.allopen") version BuildSrcGlobal.VersionKotlin apply false
+    id("com.github.johnrengelman.shadow") version PluginDeps.PluginShadow.version apply false
     id("idea")
 }
 

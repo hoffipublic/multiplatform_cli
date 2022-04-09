@@ -14,7 +14,7 @@ kotlin {
     jvmToolchain {
         val javaVersion: JavaLanguageVersion by rootProject.extra
         (this as JavaToolchainSpec).languageVersion.set(javaVersion)
-        //vendor.set(JvmVendorSpec.ADOPTOPENJDK)
+        vendor.set(JvmVendorSpec.ADOPTIUM)
     }
     jvm {
         testRuns["test"].executionTask.configure {
@@ -53,15 +53,15 @@ kotlin {
         val commonMain by getting  { // predefined by gradle multiplatform plugin
             dependencies {
                 implementation(project(":lib"))
-                implementation("io.github.microutils:kotlin-logging:${Deps.Logging.KotlinLogging.version}")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Deps.Misc.KotlinxDatetime.version}")
+                implementation("io.github.microutils:kotlin-logging:${Deps.KotlinLogging.version}")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Deps.KotlinxDatetime.version}")
                 //api(platform("com.squareup.okio:okio-bom:3.0.0"))
-                implementation("com.squareup.okio:okio:${Deps.Squareup.Okio.version}")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Deps.Serialization.KotlinxJson.version}")
+                implementation("com.squareup.okio:okio:${Deps.Okio.version}")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Deps.KotlinxJson.version}")
                 //implementation("com.charleskorn.kaml:kaml:${Deps.Misc.KOTLINXYAML.VERSION}")
-                implementation("net.mamoe.yamlkt:yamlkt:${Deps.Serialization.KotlinxYaml.version}")
+                implementation("net.mamoe.yamlkt:yamlkt:${Deps.KotlinxYaml.version}")
 
-                implementation("com.github.ajalt.clikt:clikt:${Deps.Misc.Clikt.version}")
+                implementation("com.github.ajalt.clikt:clikt:${Deps.Clikt.version}")
             }
         }
         val commonTest by getting {
@@ -73,7 +73,7 @@ kotlin {
             //print("${name} dependsOn: ")
             //println(dependsOn.map { it.name }.joinToString())
             dependencies {
-                runtimeOnly("ch.qos.logback:logback-classic") { version { strictly(Deps.Logging.Logback.version) } }
+                runtimeOnly("ch.qos.logback:logback-classic") { version { strictly(Deps.Logback.version) } }
                 //implementation("org.slf4j:slf4j-api:1.7.30")
             }
         }
