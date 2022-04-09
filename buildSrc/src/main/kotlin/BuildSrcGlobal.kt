@@ -5,7 +5,7 @@ import kotlin.reflect.full.declaredMemberProperties
 
 object BuildSrcGlobal {
     val ESCAPE = '\u001B'
-    val VersionKotlin = "1.6.20"
+    val VersionKotlin = "1.6.10"
     val JavaLanguageVersion = org.gradle.jvm.toolchain.JavaLanguageVersion.of(17)
     val jvmVendor = org.gradle.jvm.toolchain.JvmVendorSpec.ADOPTIUM
 

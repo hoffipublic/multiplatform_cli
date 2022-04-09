@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
+
 plugins {
     // `kotlin-dsl`
     id("java")
@@ -17,7 +19,7 @@ val artifactName by extra { rootProject.name.toLowerCase() }
 val repoSsh by extra("git@gitlab.com:???.git")
 val repoHttps by extra("https://gitlab.com/???.git")
 
-var javaVersion by extra(JavaLanguageVersion.of(11))
+var javaVersion by extra(JavaLanguageVersion.of(17))
 var posixHost by extra(false)
 val hostOS by extra { with(System.getProperty("os.name").toLowerCase()) { when  {
     indexOf("win") >= 0 -> "WINDOWS"
@@ -71,5 +73,41 @@ val build by tasks.existing { finalizedBy(gather) }
 val clean by tasks.existing { delete(rootProject.buildDir) }
 
 
+// ################################################################################################
+// #####    pure informational stuff on stdout    #################################################
+// ################################################################################################
 // implemented in buildSrc/src/main/kotlin/Deps.kt
 tasks.register<CheckVersionsTask>("checkVersions")
+subprojects {
+    tasks {
+        register("versionsPrint") {
+            group = "misc"
+            description = "extract spring boot versions from dependency jars"
+            doLast {
+                val foreground = BuildSrcGlobal.ConsoleColor.YELLOW
+                val background = BuildSrcGlobal.ConsoleColor.DEFAULT
+                BuildSrcGlobal.printlnColor(foreground, "Gradle version: " + project.gradle.gradleVersion, background)
+                BuildSrcGlobal.printColor(foreground, "Kotlin version: " + project.kotlinExtension.coreLibrariesVersion) ; if (project.kotlinExtension.coreLibrariesVersion != BuildSrcGlobal.VersionKotlin) BuildSrcGlobal.printColor(BuildSrcGlobal.ConsoleColor.RED, " ( != ${BuildSrcGlobal.VersionKotlin} )")
+                println()
+                BuildSrcGlobal.printlnColor(foreground, "javac  version: " + org.gradle.internal.jvm.Jvm.current(), background) // + " with compiler args: " + options.compilerArgs, backgroundColor = BuildSrcGlobal.ConsoleColor.DARK_GRAY)
+                BuildSrcGlobal.printlnColor(foreground, "       srcComp: " + java.sourceCompatibility, background)
+                BuildSrcGlobal.printlnColor(foreground, "       tgtComp: " + java.targetCompatibility, background)
+                BuildSrcGlobal.printlnColor(foreground, "versions of core dependencies:", background)
+                val regex = Regex(pattern = "^(spring-cloud-starter|spring-boot-starter|micronaut-core|kotlin-stdlib-jdk[0-9-]+|foundation-desktop)-[0-9].*$")
+                if (subprojects.size > 0) {
+                    project.configurations.compileClasspath.get().isCanBeResolved = true
+                    project.configurations.compileClasspath.get().map { it.nameWithoutExtension }.filter { it.matches(regex) }
+                        .forEach { BuildSrcGlobal.printlnColor(foreground, String.format("%-25s: %s", project.name, it), background) }
+                } else {
+                    project.configurations.compileClasspath.get().isCanBeResolved = true
+                    project.configurations.compileClasspath.get().map { it.nameWithoutExtension }.filter { it.matches(regex) }
+                        .forEach { BuildSrcGlobal.printlnColor(foreground, "  $it", background) }
+                }
+            }
+        }
+    }
+    build {
+        val versionsPrint by tasks.existing
+        finalizedBy(versionsPrint)
+    }
+}
