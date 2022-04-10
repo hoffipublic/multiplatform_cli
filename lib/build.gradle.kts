@@ -12,21 +12,19 @@ repositories {
 
 kotlin {
     jvmToolchain {
-        val javaVersion: JavaLanguageVersion by rootProject.extra
-        (this as JavaToolchainSpec).languageVersion.set(javaVersion)
-        vendor.set(JvmVendorSpec.ADOPTIUM)
+        (this as JavaToolchainSpec).languageVersion.set(BuildSrcGlobal.JavaLanguageVersion)
+        vendor.set(BuildSrcGlobal.jvmVendor)
     }
     jvm {
         testRuns["test"].executionTask.configure {
             useJUnit()
         }
     }
-    val hostOS: String by rootProject.extra
-    when (hostOS) {
-        "MAC" -> macosX64()
-        "LINUX" -> linuxX64()
-        "WINDOWS" -> mingwX64()
-        else -> throw GradleException("Host OS is not supported in Kotlin/Native: $hostOS from '${System.getProperty("os.name")}'")
+    when (BuildSrcGlobal.hostOS) {
+        BuildSrcGlobal.HOSTOS.MAC     -> macosX64()
+        BuildSrcGlobal.HOSTOS.LINUX   -> linuxX64()
+        BuildSrcGlobal.HOSTOS.WINDOWS -> mingwX64()
+        else -> throw GradleException("Host OS is not supported in Kotlin/Native: ${BuildSrcGlobal.hostOS} from '${System.getProperty("os.name")}'")
     }
 
     sourceSets {
@@ -56,19 +54,19 @@ kotlin {
                 implementation(kotlin("test-junit"))
             }
         }
-        when (hostOS) {
-            "MAC" -> {
+        when (BuildSrcGlobal.hostOS) {
+            BuildSrcGlobal.HOSTOS.MAC -> {
                 val macosX64Main by getting {
                     dependencies {
-                    }}}
-            "LINUX" -> {
+            }}}
+            BuildSrcGlobal.HOSTOS.LINUX -> {
                 val linuxX64Main by getting {
                     dependencies {
-                    }}}
-            "WINDOWS" -> {
+            }}}
+            BuildSrcGlobal.HOSTOS.WINDOWS -> {
                 val mingwX64Main by getting {
                     dependencies {
-                    }}}
+            }}}
             else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
         }
     }

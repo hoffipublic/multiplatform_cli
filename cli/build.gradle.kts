@@ -12,18 +12,16 @@ val theMainClass by extra { "com.hoffi.mpp.cli.AppKt" }
 
 kotlin {
     jvmToolchain {
-        val javaVersion: JavaLanguageVersion by rootProject.extra
-        (this as JavaToolchainSpec).languageVersion.set(javaVersion)
-        vendor.set(JvmVendorSpec.ADOPTIUM)
+        (this as JavaToolchainSpec).languageVersion.set(BuildSrcGlobal.JavaLanguageVersion)
+        vendor.set(BuildSrcGlobal.jvmVendor)
     }
     jvm {
         testRuns["test"].executionTask.configure {
             useJUnit()
         }
     }
-    val hostOS: String by rootProject.extra
-    when (hostOS) {
-        "MAC" -> macosX64() {
+    when (BuildSrcGlobal.hostOS) {
+        BuildSrcGlobal.HOSTOS.MAC -> macosX64() {
             binaries {
                 executable {
                     // entry point function = package with non-inside-object main method + ".main" (= name of the main function)
@@ -31,7 +29,7 @@ kotlin {
                 }
             }
         }
-        "LINUX" -> linuxX64() {
+        BuildSrcGlobal.HOSTOS.LINUX -> linuxX64() {
             binaries {
                 executable {
                     // entry point function = package with non-inside-object main method + ".main" (= name of the main function)
@@ -39,7 +37,7 @@ kotlin {
                 }
             }
         }
-        "WINDOWS" -> mingwX64() {
+        BuildSrcGlobal.HOSTOS.WINDOWS -> mingwX64() {
             binaries {
                 executable {
                     // entry point function = package with non-inside-object main method + ".main" (= name of the main function)
@@ -47,7 +45,7 @@ kotlin {
                 }
             }
         }
-        else -> throw GradleException("Host OS is not supported in Kotlin/Native: $hostOS from '${System.getProperty("os.name")}'")
+        else -> throw GradleException("Host OS is not supported in Kotlin/Native: ${BuildSrcGlobal.hostOS} from '${System.getProperty("os.name")}'")
     }
     sourceSets {
         val commonMain by getting  { // predefined by gradle multiplatform plugin
@@ -84,19 +82,19 @@ kotlin {
                 implementation(kotlin("test-annotations-common"))
             }
         }
-        when (hostOS) {
-            "MAC" -> {
+        when (BuildSrcGlobal.hostOS) {
+            BuildSrcGlobal.HOSTOS.MAC -> {
                 val macosX64Main by getting {
                     dependencies {
-                    }}}
-            "LINUX" -> {
+            }}}
+            BuildSrcGlobal.HOSTOS.LINUX -> {
                 val linuxX64Main by getting {
                     dependencies {
-                    }}}
-            "WINDOWS" -> {
+            }}}
+            BuildSrcGlobal.HOSTOS.WINDOWS -> {
                 val mingwX64Main by getting {
                     dependencies {
-                    }}}
+            }}}
             else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
         }
     }
@@ -117,7 +115,7 @@ tasks {
         }
         mergeServiceFiles()
 
-        //archiveClassifier.set("fat")
+        archiveClassifier.set("fat")
         from(kotlin.jvm().compilations.getByName("main").output)
         configurations =
             mutableListOf(kotlin.jvm().compilations.getByName("main").compileDependencyFiles)

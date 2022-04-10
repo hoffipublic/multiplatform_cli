@@ -19,15 +19,6 @@ val artifactName by extra { rootProject.name.toLowerCase() }
 val repoSsh by extra("git@gitlab.com:???.git")
 val repoHttps by extra("https://gitlab.com/???.git")
 
-var javaVersion by extra(JavaLanguageVersion.of(17))
-var posixHost by extra(false)
-val hostOS by extra { with(System.getProperty("os.name").toLowerCase()) { when  {
-    indexOf("win") >= 0 -> "WINDOWS"
-    indexOf("mac") >= 0 -> { posixHost = true ; "MAC" }
-    indexOf("nix") >= 0 || indexOf("nux") >= 0 || indexOf("aix") > 0 -> { posixHost = true ; "LINUX" }
-    else -> throw GradleException("Host OS is not supported in Kotlin/Native: '${System.getProperty("os.name")}'")
-}}}
-
 allprojects {
     repositories {
         mavenLocal()
@@ -37,6 +28,7 @@ allprojects {
     tasks {
         withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
             kotlinOptions {
+                jvmTarget = BuildSrcGlobal.JavaLanguageVersion.toString()
                 //Will retain parameter names for Java reflection
                 javaParameters = true
                 //freeCompilerArgs = freeCompilerArgs + listOf(
