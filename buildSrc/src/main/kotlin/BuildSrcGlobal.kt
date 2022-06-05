@@ -6,8 +6,8 @@ import kotlin.reflect.full.declaredMemberProperties
 
 object BuildSrcGlobal {
     val ESCAPE = '\u001B'
-    val VersionKotlin = "1.6.20"
     val JavaLanguageVersion = org.gradle.jvm.toolchain.JavaLanguageVersion.of(17)
+    val VersionKotlin = "1.6.21"
     val jvmVendor = org.gradle.jvm.toolchain.JvmVendorSpec.ADOPTIUM
     var posixHost = false
     enum class HOSTOS { WINDOWS, MAC, LINUX }

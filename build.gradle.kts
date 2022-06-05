@@ -41,7 +41,7 @@ allprojects {
 
 // copy all jars to root project's build/libs
 val gather = tasks.register<Copy>("gather") {
-    mkdir(File(rootProject.buildDir,"libs"))
+    mkdir(File(rootProject.buildDir, "libs"))
     val allSubprojectsLibDirs: MutableList<String> = mutableListOf()
     subprojects.forEach { allSubprojectsLibDirs.add("${it.buildDir}/libs") }
     into(project.rootProject.buildDir.toString())
@@ -49,18 +49,17 @@ val gather = tasks.register<Copy>("gather") {
         from(allSubprojectsLibDirs)
     }
 
-    mkdir(File(rootProject.buildDir,"bin"))
-    val allSubprojectsBinDirs: MutableList<String> = mutableListOf()
+    mkdir(File(rootProject.buildDir, "bin"))
     subprojects.forEach { theSubproject ->
-        listOf("mac", "unix", "windows").forEach {
-            into("bin/${it}") {
-                from("${theSubproject.buildDir}/bin/${it}/releaseExecutable")
+        listOf("macosX64", "linuxX64", "mingwX64").forEach { target ->
+            into("bin/${target}") {
+                from("${theSubproject.buildDir}/bin/${target}/releaseExecutable")
                 include("*.kexe")
             }
         }
     }
 }
-val build by tasks.existing { finalizedBy(gather) }
+val build by tasks.existing { dependsOn(":cli:build") ; finalizedBy(gather) }
 // build.finalizedBy publishToMavenLocal // push jars to mavenLocal after build
 val clean by tasks.existing { delete(rootProject.buildDir) }
 
