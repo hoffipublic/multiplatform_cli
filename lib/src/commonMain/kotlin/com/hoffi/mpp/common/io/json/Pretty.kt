@@ -6,13 +6,13 @@ import kotlinx.serialization.json.Json
 const val REParOpen = "[{(\\[]"
 const val REParClos = "[})\\]]"
 // kotlin native workaround for kotlin < 1.7 (can be replaced by \\R)
-const val newline = "\u000D\u000A|[\u000A\u000B\u000C\u000D\u0085\u2028\u2029]"
-val RECombineParsOpen = Regex("(?<=$REParOpen)\\s*$newline\\s*(?=$REParOpen)", RegexOption.MULTILINE)
-val RECombineParsClos = Regex("(?<=$REParClos)\\s*$newline\\s*(?=$REParClos)", RegexOption.MULTILINE)
-val RECompressCurlies = Regex("},\\s*$newline\\s+\\{", RegexOption.MULTILINE)
-//val RECombineParsOpen = Regex("(?<=$REParOpen)\\s*\\R\\s*(?=$REParOpen)", RegexOption.MULTILINE)
-//val RECombineParsClos = Regex("(?<=$REParClos)\\s*\\R\\s*(?=$REParClos)", RegexOption.MULTILINE)
-//val RECompressCurlies = Regex("},\\s*\\R\\s+\\{", RegexOption.MULTILINE)
+//const val newline = "\u000D\u000A|[\u000A\u000B\u000C\u000D\u0085\u2028\u2029]"
+//val RECombineParsOpen = Regex("(?<=$REParOpen)\\s*$newline\\s*(?=$REParOpen)", RegexOption.MULTILINE)
+//val RECombineParsClos = Regex("(?<=$REParClos)\\s*$newline\\s*(?=$REParClos)", RegexOption.MULTILINE)
+//val RECompressCurlies = Regex("},\\s*$newline\\s+\\{", RegexOption.MULTILINE)
+val RECombineParsOpen = Regex("(?<=$REParOpen)\\s*\\R\\s*(?=$REParOpen)", RegexOption.MULTILINE)
+val RECombineParsClos = Regex("(?<=$REParClos)\\s*\\R\\s*(?=$REParClos)", RegexOption.MULTILINE)
+val RECompressCurlies = Regex("},\\s*\\R\\s+\\{", RegexOption.MULTILINE)
 
 fun String.collapseParentheses(): String {
     var s = this
