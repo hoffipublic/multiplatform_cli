@@ -31,7 +31,7 @@ object Deps {
     //val Kotlin = Dep.from("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10").also { VERSION_Kotlin = it.version ; add(it, JetBrains) }
     val Antlr            = Dep.from("org.antlr:antlr4:4.10.1").also { it.add(APACHE_GROUP) }
     val Arrow            = Dep.from("io.arrow-kt:arrow-core:1.1.2").also { it.add(CORE_GROUP) }
-    val Clikt            = Dep.from("com.github.ajalt.clikt:clikt:3.4.2").also { it.add(CONSOLE_GROUP) }
+    val Clikt            = Dep.from("com.github.ajalt.clikt:clikt:3.5.0").also { it.add(CONSOLE_GROUP) }
     // __LATEST_COMPOSE_RELEASE_VERSION__ https://github.com/JetBrains/compose-jb/releases
     val Compose          = Dep.from("org.jetbrains.compose:compose-gradle-plugin:1.1.1", repo = JETBRAINSREPO).also { it.add(JETBRAINS_GROUP) }
     val Exposed          = Dep.from("org.jetbrains.exposed:exposed-core:0.38.2").also { it.add(JETBRAINS_GROUP) }
@@ -40,7 +40,7 @@ object Deps {
     val Khttp            = Dep.from("khttp:khttp:1.0.0", JCENTERREPO).also { it.add(WEB_GROUP) }
     val Koodies          = Dep.from("com.bkahlert.koodies:koodies:1.9.7").also { it.add(CONSOLE_GROUP) }
     val KotlinLogging    = Dep.from("io.github.microutils:kotlin-logging:2.1.21").also { it.add(LOGGING_GROUP) }
-    val KotlinxDatetime  = Dep.from("org.jetbrains.kotlinx:kotlinx-datetime:0.3.2").also { it.add(JETBRAINS_GROUP) }
+    val KotlinxDatetime  = Dep.from("org.jetbrains.kotlinx:kotlinx-datetime:0.3.3").also { it.add(JETBRAINS_GROUP) }
     val Ktor             = Dep.from("io.ktor:ktor-server-core:2.0.2").also { it.add(WEB_GROUP) }
     val Logback          = Dep.from("ch.qos.logback:logback-classic:1.2.11").also { it.add(LOGGING_GROUP) }
     val Poi              = Dep.from("org.apache.poi:poi:5.2.2").also { it.add(APACHE_GROUP) }
