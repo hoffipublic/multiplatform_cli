@@ -11,10 +11,7 @@ repositories {
 }
 
 kotlin {
-    jvmToolchain {
-        (this as JavaToolchainSpec).languageVersion.set(BuildSrcGlobal.JavaLanguageVersion)
-        vendor.set(BuildSrcGlobal.jvmVendor)
-    }
+    jvmToolchain(BuildSrcGlobal.jdkVersion)
     jvm {
         testRuns["test"].executionTask.configure {
             useJUnit()

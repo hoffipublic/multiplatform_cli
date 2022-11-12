@@ -11,10 +11,7 @@ val artifactName by extra { "${rootProject.name.toLowerCase()}-${project.name.to
 val theMainClass by extra { "com.hoffi.mpp.cli.AppKt" }
 
 kotlin {
-    jvmToolchain {
-        (this as JavaToolchainSpec).languageVersion.set(BuildSrcGlobal.JavaLanguageVersion)
-        vendor.set(BuildSrcGlobal.jvmVendor)
-    }
+    jvmToolchain(BuildSrcGlobal.jdkVersion)
     jvm {
         testRuns["test"].executionTask.configure {
             useJUnit()

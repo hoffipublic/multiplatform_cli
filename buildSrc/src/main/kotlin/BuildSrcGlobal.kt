@@ -7,6 +7,7 @@ import kotlin.reflect.full.declaredMemberProperties
 object BuildSrcGlobal {
     val ESCAPE = '\u001B'
     val JavaLanguageVersion = org.gradle.jvm.toolchain.JavaLanguageVersion.of(17)
+    val jdkVersion = JavaLanguageVersion.asInt()
     val VersionKotlin = "1.7.21"
     val jvmVendor = org.gradle.jvm.toolchain.JvmVendorSpec.ADOPTIUM
     var posixHost = false
