@@ -27,12 +27,12 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("io.github.microutils:kotlin-logging:${Deps.KotlinLogging.version}")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Deps.KotlinxDatetime.version}")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Deps.KotlinxJson.version}")
-                //implementation("com.charleskorn.kaml:kaml:${Deps.Misc.KOTLINXYAML.VERSION}")
-                implementation("net.mamoe.yamlkt:yamlkt:${Deps.KotlinxYaml.version}")
-                implementation("com.squareup.okio:okio:${Deps.Okio.version}")
+                implementation("io.github.microutils:kotlin-logging".depAndVersion())
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime".depAndVersion())
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json".depAndVersion())
+                //implementation("com.charleskorn.kaml:kaml".depAndVersion())
+                implementation("net.mamoe.yamlkt:yamlkt".depAndVersion())
+                implementation("com.squareup.okio:okio".depAndVersion())
             }
         }
         val commonTest by getting {
@@ -43,7 +43,7 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
-                runtimeOnly("ch.qos.logback:logback-classic") { version { strictly(Deps.Logback.version) } }
+                runtimeOnly("ch.qos.logback:logback-classic") { version { strictly("ch.qos.logback:logback-classic".depVersionOnly()) } }
             }
         }
         val jvmTest by getting {

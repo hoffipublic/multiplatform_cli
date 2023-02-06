@@ -8,7 +8,7 @@ plugins {
     kotlin("plugin.serialization") version BuildSrcGlobal.VersionKotlin apply false
     kotlin("kapt") version BuildSrcGlobal.VersionKotlin apply false
     kotlin("plugin.allopen") version BuildSrcGlobal.VersionKotlin apply false
-    id("com.github.johnrengelman.shadow") version PluginDeps.PluginShadow.version apply false
+    id("com.github.johnrengelman.shadow") version "shadow".pluginVersion() apply false
     id("idea")
 }
 
@@ -68,7 +68,9 @@ val clean by tasks.existing { delete(rootProject.buildDir) }
 // #####    pure informational stuff on stdout    #################################################
 // ################################################################################################
 // implemented in buildSrc/src/main/kotlin/Deps.kt
-tasks.register<CheckVersionsTask>("checkVersions")
+tasks.register<CheckVersionsTask>("checkVersions") {
+    scope = "all" // "all" | "used"
+}
 subprojects {
     tasks {
         register("versionsPrint") {

@@ -48,15 +48,15 @@ kotlin {
         val commonMain by getting  { // predefined by gradle multiplatform plugin
             dependencies {
                 implementation(project(":lib"))
-                implementation("io.github.microutils:kotlin-logging:${Deps.KotlinLogging.version}")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Deps.KotlinxDatetime.version}")
-                //api(platform("com.squareup.okio:okio-bom:3.0.0"))
-                implementation("com.squareup.okio:okio:${Deps.Okio.version}")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Deps.KotlinxJson.version}")
-                //implementation("com.charleskorn.kaml:kaml:${Deps.Misc.KOTLINXYAML.VERSION}")
-                implementation("net.mamoe.yamlkt:yamlkt:${Deps.KotlinxYaml.version}")
+                implementation("io.github.microutils:kotlin-logging".depAndVersion())
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime".depAndVersion())
+                //api(platform("com.squareup.okio:okio-bom".depAndVersion())
+                implementation("com.squareup.okio:okio".depAndVersion())
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json".depAndVersion())
+                //implementation("com.charleskorn.kaml:kaml".depAndVersion())
+                implementation("net.mamoe.yamlkt:yamlkt".depAndVersion())
 
-                implementation("com.github.ajalt.clikt:clikt:${Deps.Clikt.version}")
+                implementation("com.github.ajalt.clikt:clikt".depAndVersion())
             }
         }
         val commonTest by getting {
@@ -68,7 +68,7 @@ kotlin {
             //print("${name} dependsOn: ")
             //println(dependsOn.map { it.name }.joinToString())
             dependencies {
-                runtimeOnly("ch.qos.logback:logback-classic") { version { strictly(Deps.Logback.version) } }
+                runtimeOnly("ch.qos.logback:logback-classic") { version { strictly("ch.qos.logback:logback-classic".depVersionOnly()) } }
                 //implementation("org.slf4j:slf4j-api:1.7.30")
             }
         }

@@ -15,14 +15,16 @@ open class CheckVersionsTask : DefaultTask() {
             if (gradleShellVersion != gradlewVersion) println("mismatch: gradle shell ${gradleShellVersion}\nvs local wrapper $gradlewVersion")
         }
         val depsToCheck = if (scope.equals("ALL", ignoreCase = true)) {
-            Deps.ALL
+            val all = sortedMapOf<String, MutableSet<Dep>>().toMutableMap()
+            DepVersions.vMap.values.forEach { all.getOrPut(it.groupkey){emptySet<Dep>().toMutableSet()}.add(it) }
+            all
         } else {
-            Deps.USED
+            DepVersions.USED
         }
         println("dependencies to check: ${depsToCheck.flatMap { it.value }.size}")
-        for (depEntries in depsToCheck) {
+        for (depEntries in depsToCheck.toSortedMap()) {
             println("${depEntries.key}:")
-            for (dep in depEntries.value) {
+            for (dep in depEntries.value.toSortedSet(compareBy({it.group}, {it.artifact}))) {
                 try {
                     val text = dep.mavenMetadataXmlURL().readText()
                     val regexLatest = Regex("<latest>(.*)</latest>", RegexOption.MULTILINE)
@@ -35,7 +37,7 @@ open class CheckVersionsTask : DefaultTask() {
                         ! it.contains(Regex("(alpha|beta|\\d\\d\\d\\d-\\d\\d-\\d\\d)"))
                     }
 
-                    print(String.format("  %-20s current: %-14s", dep.artifact, dep.version))
+                    print(String.format("  %-30s current: %-14s", dep.artifact, dep.version))
                     var latest = "not found"
                     var release = "not found"
                     if(latestMatchResult != null) latest = latestMatchResult.groupValues[1]
@@ -56,9 +58,9 @@ open class CheckVersionsTask : DefaultTask() {
         }
 
         val pluginsToCheck = if (scope.equals("ALL", ignoreCase = true)) {
-            PluginDeps.ALL
+            DepVersionPlugins.vSet
         } else {
-            PluginDeps.USED
+            DepVersionPlugins.USED
         }
         println("\nGradle Plugins:\n===============")
         for(depPlugin in pluginsToCheck) {
@@ -73,9 +75,10 @@ open class CheckVersionsTask : DefaultTask() {
             if(depPlugin.version == latest) {
                 print(" up-to-date")
             } else {
-                print(String.format(" latest: %-19s", latest))
+                // print(String.format(" latest: %-19s", latest))
+                print(String.format(" latest: %s", latest))
+                print("    ${url}")
             }
-            print("    ${url}")
             println("")
         }
     }
