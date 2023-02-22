@@ -1,0 +1,5 @@
+@startyaml
+
+!include buildspec.yml
+
+@endyaml

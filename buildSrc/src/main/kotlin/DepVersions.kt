@@ -31,8 +31,8 @@ object DepVersions {
         Dep.from("com.github.ajalt.clikt:clikt:3.5.1", GROUP_CONSOLE),
 
         Dep.from("com.h2database:h2:2.1.214", GROUP_DB),
-        //Dep.from("org.postgresql:postgresql:42.5.3", GROUP_DB, versionRegex = "${THREEDIGITSs}\\.jre\\d*\$"),
-        Dep.from("org.postgresql:postgresql:42.5.3", GROUP_DB),
+        //Dep.from("org.postgresql:postgresql:42.5.4", GROUP_DB, versionRegex = "${THREEDIGITSs}\\.jre\\d*\$"),
+        Dep.from("org.postgresql:postgresql:42.5.4", GROUP_DB),
 
         // __LATEST_COMPOSE_RELEASE_VERSION__ https://github.com/JetBrains/compose-jb/releases
         Dep.from("org.jetbrains.compose:compose-gradle-plugin:1.3.0", GROUP_JETBRAINS, repo = JETBRAINSREPO),
@@ -83,9 +83,9 @@ object DepVersions {
         return "$groupAndArtifact:${dep.version}"
     }
     fun versionOf(groupAndArtifact: String, otherDep: String): String {
-        val otherDep = vMap[otherDep] ?: throw GradleException("unknown dependency version (not in 'buildSrc/src/main/kotlin/DepVersions.kt'): \"$otherDep\"")
-        USED.getOrPut(otherDep.groupkey){emptySet<Dep>().toMutableSet()}.add(otherDep)
-        return "$groupAndArtifact:${otherDep.version}"
+        val theOtherDep = vMap[otherDep] ?: throw GradleException("unknown dependency version (not in 'buildSrc/src/main/kotlin/DepVersions.kt'): \"$otherDep\"")
+        USED.getOrPut(theOtherDep.groupkey){emptySet<Dep>().toMutableSet()}.add(theOtherDep)
+        return "$groupAndArtifact:${theOtherDep.version}"
     }
     fun versionOnly(groupAndArtifact: String): String {
         val dep = vMap[groupAndArtifact] ?: throw GradleException("unknown dependency version (not in 'buildSrc/src/main/kotlin/DepVersions.kt'): \"$groupAndArtifact\"")
@@ -98,7 +98,7 @@ fun String.pluginVersion() = DepVersionPlugins.v(this)
 object DepVersionPlugins {
     val USED = mutableSetOf<DepPlugin>()
     val vSet = setOf<DepPlugin>(
-        DepPlugin("micronaut", "io.micronaut.application", version = "3.7.0"),
+        DepPlugin("micronaut", "io.micronaut.application", version = "3.7.2"),
         DepPlugin("shadow", "com.github.johnrengelman.shadow", version = "7.1.2"),
     )
     fun v(pluginName: String): String {

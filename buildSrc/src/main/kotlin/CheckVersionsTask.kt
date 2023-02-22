@@ -9,8 +9,8 @@ open class CheckVersionsTask : DefaultTask() {
     @TaskAction
     fun checkDepVersions() {
         val gradleVersionRegex = Regex(".*Gradle ([^ \\n\\r]+).*", RegexOption.MULTILINE)
-        val gradleShellVersion = runCatching { "gradle --version".runCommand()?.let { gradleVersionRegex.find(it)?.value } ?: "unknown" }.onFailure { "shell gradle not installed" }.getOrElse { "not installed locally" }
-        val gradlewVersion  =    runCatching { "${project.rootProject.projectDir}/gradlew --version".runCommand()?.let { gradleVersionRegex.find(it)?.value } ?: "unknown" }.onFailure { "no gradlew" }.getOrElse { "unknown" }
+        val gradleShellVersion = runCatching { "gradle --version".runCommand()?.let { gradleVersionRegex.find(it)?.value } ?: "unknown" }.onFailure { System.err.println("shell gradle not installed") }.getOrElse { "not installed locally" }
+        val gradlewVersion  =    runCatching { "${project.rootProject.projectDir}/gradlew --version".runCommand()?.let { gradleVersionRegex.find(it)?.value } ?: "unknown" }.onFailure { System.err.println("no gradlew") }.getOrElse { "unknown" }
         if (gradleShellVersion != "not installed locally") {
             if (gradleShellVersion != gradlewVersion) println("mismatch: gradle shell ${gradleShellVersion}\nvs local wrapper $gradlewVersion")
         }

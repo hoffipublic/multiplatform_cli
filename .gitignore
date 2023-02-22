@@ -1,9 +1,95 @@
-# Ignore Gradle project-specific cache directory
+HELP.md
+/certs/
 .gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-# Ignore Gradle build output directory
-build
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
 
+### IntelliJ IDEA ###
 .idea/
-/*.hprof
+!.idea/scopes/
+!.idea/fileColors.xml
+
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+*.log
+logback.out.xml
+*.out
+*.bak
+*.backup
+
+*.iml
+*.ipr
+*.iws
+derby.log
+log.roo
+#
+activemq-data/
+.sass-cache/
+.codekit-config.json
+
+.springBeans
+/spring_loaded/**
+
+## generic dirs to ignore
+log/*
+tmp/*
+temp/*
+backup/*
+**/generated/*
+bak/*
+.svn
+
+## java specific ignores
+/*/classes/*
+classes/
+/*/bin/*
+bin/
+*.class
+
+## eclipse ignores (created by gradle)
+## force add:        $ git add -f <project>/.classpath
+## assume unchanged: $ git update-index --assume-unchanged <project>/.classpath
+## recursive:        $  find ./ -maxdepth 2 -path "./*/.classpath" | xargs git update-index --assume-unchanged
+.project
+.classpath
+
+
+## other ignores
+Thumbs.db
+*.DS_Store
+.Spotlight-V100
+.Trashes
+.sts4-cache/
+/*.hprof                                                                                          │
+
+
+## specific ignores
+/out/
+/certs/
 

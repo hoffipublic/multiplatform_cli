@@ -125,7 +125,7 @@ log.warn { "result code: ${result.returnCode}" }
 │  8 -rw-r--r--  1 redacted  staff    74B Apr 25  2021 settings.gradle.kts
 │ multiple cmds possible
 ╰───────────────────────────────────────────────────────────────────────────────────────────────
-16:20:02.722 [main] WARN com.hoffi.mpp.cli.App - result code: 0
+16:20:02.722 [main] WARN com.hoffi.mppcli.cli.App - result code: 0
 ```
 
 ```kotlin

@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="00__" pattern="file:01__*/||file:02__*/||file:03__*/||file:ZZ__*/||file:ZZ__*" />
+</component>

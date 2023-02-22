@@ -28,3 +28,12 @@ val build by tasks.existing {
     val versionsPrint by tasks.existing
     finalizedBy(versionsPrint)
 }
+//// or within subprojects { ... } or allprojects { ... }
+//try {
+//    val buildTask = project.tasks.getByPath(":${project.name}:build")
+//    val versionsPrint by tasks.existing
+//    buildTask.finalizedBy(versionsPrint)
+//} catch (ex: UnknownTaskException) {
+//    println("-> WARNING -> ${project.name} does not have a 'build' task.")
+//    // project.tasks.forEach { println("     ${it.name}") }
+//}

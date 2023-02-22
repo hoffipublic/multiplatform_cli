@@ -8,37 +8,43 @@ plugins {
 group = "${rootProject.group}"
 version = "${rootProject.version}"
 val artifactName by extra { "${rootProject.name.toLowerCase()}-${project.name.toLowerCase()}" }
-val theMainClass by extra { "com.hoffi.mpp.cli.AppKt" }
+val rootPackage: String by rootProject.extra
+val projectPackage: String by extra { "${rootPackage}.${project.name.toLowerCase()}" }
+val theMainClass: String by extra { "App" }
+application {
+    mainClass.set("${projectPackage}.${theMainClass}" + "Kt") // + "Kt" if fun main is outside a class
+}
 
 kotlin {
     jvmToolchain(BuildSrcGlobal.jdkVersion)
     jvm {
         testRuns["test"].executionTask.configure {
-            useJUnit()
+            //useJUnit()
+            useJUnitPlatform() // execute with testImplementation("org.junit.jupiter:junit-jupiter-engine")
         }
     }
     when (BuildSrcGlobal.hostOS) {
-        BuildSrcGlobal.HOSTOS.MAC -> macosX64() {
+        BuildSrcGlobal.HOSTOS.MACOS -> macosX64 {
             binaries {
                 executable {
                     // entry point function = package with non-inside-object main method + ".main" (= name of the main function)
-                    entryPoint(theMainClass.replaceAfterLast(".", "main"))
+                    entryPoint("${projectPackage}.main")
                 }
             }
         }
-        BuildSrcGlobal.HOSTOS.LINUX -> linuxX64() {
+        BuildSrcGlobal.HOSTOS.LINUX -> linuxX64 {
             binaries {
                 executable {
                     // entry point function = package with non-inside-object main method + ".main" (= name of the main function)
-                    entryPoint(theMainClass.replaceAfterLast(".", "main"))
+                    entryPoint("${projectPackage}.main")
                 }
             }
         }
-        BuildSrcGlobal.HOSTOS.WINDOWS -> mingwX64() {
+        BuildSrcGlobal.HOSTOS.WINDOWS -> mingwX64 {
             binaries {
                 executable {
                     // entry point function = package with non-inside-object main method + ".main" (= name of the main function)
-                    entryPoint(theMainClass.replaceAfterLast(".", "main"))
+                    entryPoint("${projectPackage}.main")
                 }
             }
         }
@@ -74,13 +80,13 @@ kotlin {
         }
         val jvmTest by getting {
             dependencies {
-                implementation(kotlin("test-junit"))
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
+                //implementation(kotlin("test-junit"))
+                //implementation(kotlin("test-common"))
+                //implementation(kotlin("test-annotations-common"))
             }
         }
         when (BuildSrcGlobal.hostOS) {
-            BuildSrcGlobal.HOSTOS.MAC -> {
+            BuildSrcGlobal.HOSTOS.MACOS -> {
                 val macosX64Main by getting {
                     dependencies {
             }}}
@@ -95,10 +101,6 @@ kotlin {
             else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
         }
     }
-}
-
-application {
-    mainClass.set(theMainClass)
 }
 
 //tasks.getByName<JavaExec>("run") {
@@ -116,7 +118,7 @@ tasks {
         classpath += files("$buildDir/processedResources/jvm/main")
     }
     shadowJar {
-        manifest { attributes["Main-Class"] = theMainClass }
+        manifest { attributes["Main-Class"] = "${projectPackage}.${theMainClass}" + "Kt" }
         archiveClassifier.set("fat")
         val jvmJar = named<org.gradle.jvm.tasks.Jar>("jvmJar").get()
         from(jvmJar.archiveFile)
