@@ -16,12 +16,12 @@ class FileSystemTest : FunSpec({
     val toSearchForArr1 = arrayOf(toSearchFor)
     val toSearchForArr2 = arrayOf("something", toSearchFor)
     val toSearchForArr3 = arrayOf("something", "src", toSearchFor)
-    val cutPrefix       = (fs.cwd()/"..").normalized()
+    val cutPrefix       = (cwd()/"..").normalized()
 
     val onlyFiles = FileMetadata(isRegularFile = true, isDirectory = false, symlinkTarget = null)
     val onlyDirs  = FileMetadata(isRegularFile = false, isDirectory = true, symlinkTarget = null)
 
-    val expectedAbsPathFile = (fs.cwd()/".."/"lib/$toSearchFor").normalized()
+    val expectedAbsPathFile = (cwd()/".."/"lib/$toSearchFor").normalized()
     val expectedAbsPathDir = expectedAbsPathFile.parent!!
     val expectedCutPathFile = expectedAbsPathFile.toString().removePrefix("$cutPrefix/").toPath()
     val expectedCutPathDir = expectedCutPathFile.parent!!

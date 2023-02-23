@@ -6,4 +6,4 @@ import okio.Path.Companion.toPath
 import java.io.File
 
 actual val fs: FileSystem = FileSystem.SYSTEM
-actual fun FileSystem.cwd(): Path = File(File(".").absolutePath).canonicalPath.toPath()
+actual fun cwd(): Path = File(".").absolutePath.toPath(normalize = true) // (File(File(".").absolutePath).canonicalPath.toPath()

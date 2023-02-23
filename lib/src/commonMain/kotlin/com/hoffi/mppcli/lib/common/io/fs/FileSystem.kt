@@ -8,13 +8,13 @@ import okio.Path.Companion.toPath
 
 expect val fs: FileSystem
 
-expect fun FileSystem.cwd(): Path
+expect fun cwd(): Path
 
 enum class DIRUPSEARCH { WHOLEPATH, PARENT_DIR }
 enum class DIRUPSEARCH_MULTIPLE { AND, OR}
 
 fun dirUpsearch(
-    fromAbsPathOrRelToCwd: Path = fs.cwd(),
+    fromAbsPathOrRelToCwd: Path = cwd(),
     vararg toSearchFor: String,
     whatToReturn: DIRUPSEARCH = DIRUPSEARCH.WHOLEPATH,
     cutPrefix: Path? = null,
@@ -22,7 +22,7 @@ fun dirUpsearch(
 ): Path {
     if (fromAbsPathOrRelToCwd.isRoot) { throw Exception("cannot dirUpsearch from root dir") }
     if(toSearchFor.isEmpty()) { throw Exception("toSearchFor is empty, nothing to search for") }
-    var fromPath = if (fromAbsPathOrRelToCwd.isAbsolute) fromAbsPathOrRelToCwd else fs.cwd().resolve(fromAbsPathOrRelToCwd, normalize = true)
+    var fromPath = if (fromAbsPathOrRelToCwd.isAbsolute) fromAbsPathOrRelToCwd else cwd().resolve(fromAbsPathOrRelToCwd, normalize = true)
     // POSIX okio fs.exists(path) crashes if path does not denote a folder, but a regular file
     val fromPathMetadata = fs.metadataOrNull(fromPath)
     if (fromPathMetadata != null && fromPathMetadata.isRegularFile) fromPath = fromPath.parent!!
