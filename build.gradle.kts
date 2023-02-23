@@ -33,6 +33,27 @@ allprojects {
         //mavenLocal()
         mavenCentral()
     }
+
+    // some abbreviations and shortcuts
+    fun Task.dependsOnIfExists(vararg name: String) = name.forEach { taskName: String ->
+        if (tasks.names.contains(taskName)) {
+            dependsOn(taskName)
+            println("  -> :${project.name}:$taskName")
+        }
+    }
+    // 'c'ompile 'c'ommon (java in this case, but cc is just convenient to type)
+    val cc by tasks.registering {
+        val jvmCompileTasks     = arrayOf("compileKotlinJvm")
+        val jvmCompileTestTasks = arrayOf("compileTestKotlinJvm")
+        dependsOnIfExists(*(jvmCompileTasks + jvmCompileTestTasks))
+    }
+    // 'c'ompile 'n'ative
+    val cn by tasks.registering {
+        dependsOn(cc)
+        val nativeCompileTasks     = arrayOf("compileKotlinNative",     "compileKotlinMacosX64",     "compileKotlinLinuxX64",     "compileKotlinMingwX64")
+        val nativeCompileTestTasks = arrayOf("compileTestKotlinNative", "compileTestKotlinMacosX64", "compileTestKotlinLinuxX64", "compileTestKotlinMingwX64")
+        dependsOnIfExists(*(nativeCompileTasks + nativeCompileTestTasks))
+    }
 }
 
 subprojects {
@@ -141,7 +162,7 @@ val gather = tasks.register<Copy>("gather") {
 
     mkdir(File(rootProject.buildDir, "bin"))
     subprojects.forEach { theSubproject ->
-        listOf("macosX64", "linuxX64", "mingwX64").forEach { target ->
+        listOf("macosX64", "linuxX64", "mingwX64", "native").forEach { target ->
             into("bin/${target}") {
                 from("${theSubproject.buildDir}/bin/${target}/releaseExecutable")
                 include("*.kexe")
