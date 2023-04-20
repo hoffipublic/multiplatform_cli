@@ -7,9 +7,9 @@ plugins {
 
 group = "${rootProject.group}"
 version = "${rootProject.version}"
-val artifactName by extra { "${rootProject.name.toLowerCase()}-${project.name.toLowerCase()}" }
+val artifactName by extra { "${rootProject.name.lowercase()}-${project.name.lowercase()}" }
 val rootPackage: String by rootProject.extra
-val projectPackage: String by extra { "${rootPackage}.${project.name.toLowerCase()}" }
+val projectPackage: String by extra { "${rootPackage}.${project.name.lowercase()}" }
 val theMainClass: String by extra { "App" }
 application {
     mainClass.set("${projectPackage}.${theMainClass}" + "Kt") // + "Kt" if fun main is outside a class

@@ -66,7 +66,12 @@ open class CheckVersionsTask : DefaultTask() {
         for(depPlugin in pluginsToCheck) {
             val regexLatest = Regex("Version (.*) \\(latest\\)", setOf(RegexOption.MULTILINE, RegexOption.UNIX_LINES))
             val url = "https://plugins.gradle.org/plugin/${depPlugin.id}"
-            val text = java.net.URL(url).readText()
+            val text = try {
+                java.net.URL(url).readText()
+            } catch (e: java.io.IOException) {
+                System.err.println("while trying to get plugin version for '${depPlugin.id}' got: '${e.message}'. ${if(depPlugin.interactiveUrl.isNotBlank()) " you can check manually under ${depPlugin.interactiveUrl}" else ""}")
+                continue
+            }
             // println(text)
             val latestMatchResult = regexLatest.find(text)
             var latest = "not found"

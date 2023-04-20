@@ -8,18 +8,19 @@ object BuildSrcGlobal {
     val ESCAPE = '\u001B'
     val JavaLanguageVersion = org.gradle.jvm.toolchain.JavaLanguageVersion.of(17)
     val jdkVersion = JavaLanguageVersion.asInt()
-    val VersionKotlin = "1.8.10"
+    val VersionKotlin = "1.8.20"
+    object Compose { val kotlinVersion = VersionKotlin; val composePluginVersion = "1.4.0" }
     val jvmVendor = org.gradle.jvm.toolchain.JvmVendorSpec.ADOPTIUM
     var posixHost = false
     enum class HOSTOS { WINDOWS, MACOS, LINUX }
-    val hostOS = with(System.getProperty("os.name").toLowerCase()) { when  {
+    val hostOS = with(System.getProperty("os.name").lowercase()) { when  {
         indexOf("win") >= 0 -> HOSTOS.WINDOWS
         indexOf("mac") >= 0 -> { posixHost = true ; HOSTOS.MACOS }
         indexOf("nix") >= 0 || indexOf("nux") >= 0 || indexOf("aix") > 0 -> { posixHost = true ; HOSTOS.LINUX }
         else -> System.err.println("Host OS is not supported in Kotlin/Native: '${System.getProperty("os.name")}'")
     }}
     enum class HOSTARCH { X86, ARM, M1 }
-    val hostArch = with(System.getProperty("os.arch").toLowerCase()) { when {
+    val hostArch = with(System.getProperty("os.arch").lowercase()) { when {
         indexOf("x86") >= 0  -> HOSTARCH.X86
         indexOf("amd") >= 0  -> HOSTARCH.X86
         indexOf("arm") >= 0  -> HOSTARCH.ARM

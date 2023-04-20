@@ -33,7 +33,7 @@ val createIntellijScopeSentinels = tasks.register("createIntellijScopeSentinels"
             val suffix = if (prj.name == rootProject.name) {
                 "ROOT"
             } else {
-                prj.name.toUpperCase()
+                prj.name.uppercase()
             }
             prj.pluginManager.let { when {
                 it.hasPlugin("org.jetbrains.kotlin.jvm") -> {
@@ -62,18 +62,23 @@ val createIntellijScopeSentinels = tasks.register("createIntellijScopeSentinels"
                         File(dir, ".gitkeep").createNewFile()
                         File(prj.projectDir, "ZZ__$suffix").createNewFile()
                     }
-                    prj.kotlin.sourceSets.forEach { sourceSet ->
-                        val ssDir = if (prj.name == rootProject.name) {
-                            File("src/${sourceSet.name}")
-                        } else {
-                            File("${prj.projectDir}/src/${sourceSet.name}")
-                        }
-                        if (ssDir.exists()) {
-                            if (sourceSet.name.endsWith("Main")) {
-                                val mName = sourceSet.name.removeSuffix("Main").capitalize()
-                                val dir = mkdir("$ssDir/_src${mName}_$suffix")
-                                File(dir, ".gitkeep").createNewFile()
-                                File(ssDir, "ZZsrc${mName}_$suffix").createNewFile()
+                    val kotlinMultiplatformExtension = prj.extensions.findByType(org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension::class.java)
+                    val kotlinProjectExtension = kotlinMultiplatformExtension as org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
+                    //prj.kotlin.sourceSets.forEach {
+                    kotlinProjectExtension.sourceSets.forEach { topKotlinSourceSet ->
+                        kotlin.sourceSets.forEach { kotlinSourceSet ->
+                            val ssDir = if (prj.name == rootProject.name) {
+                                File("src/${topKotlinSourceSet.name}")
+                            } else {
+                                File("${prj.projectDir}/src/${topKotlinSourceSet.name}")
+                            }
+                            if (ssDir.exists()) {
+                                if (topKotlinSourceSet.name.endsWith("Main")) {
+                                    val mName = topKotlinSourceSet.name.removeSuffix("Main").capitalize()
+                                    val dir = mkdir("$ssDir/_src${mName}_$suffix")
+                                    File(dir, ".gitkeep").createNewFile()
+                                    File(ssDir, "ZZsrc${mName}_$suffix").createNewFile()
+                                }
                             }
                         }
                     }

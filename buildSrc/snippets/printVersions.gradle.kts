@@ -4,8 +4,10 @@ tasks.register("versionsPrint") {
     doLast {
         val foreground = BuildSrcGlobal.ConsoleColor.YELLOW
         val background = BuildSrcGlobal.ConsoleColor.DEFAULT
-        val shadowJar by tasks.getting(com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar::class)
-        BuildSrcGlobal.printlnColor(foreground, "  fat/uber jar: ${shadowJar.archiveFileName.get()}", background)
+        if (pluginManager.hasPlugin("com.github.johnrengelman.shadow")) {
+            val shadowJar by getting(com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar::class)
+            BuildSrcGlobal.printlnColor(foreground, "  fat/uber jar: ${shadowJar.archiveFileName.get()}", background)
+        }
         BuildSrcGlobal.printlnColor(foreground, "Gradle version: " + project.gradle.gradleVersion, background)
         BuildSrcGlobal.printColor(foreground, "Kotlin version: " + kotlin.coreLibrariesVersion) ; if (kotlin.coreLibrariesVersion != BuildSrcGlobal.VersionKotlin) BuildSrcGlobal.printColor(
         BuildSrcGlobal.ConsoleColor.RED, " ( != ${BuildSrcGlobal.VersionKotlin} )")
@@ -15,13 +17,26 @@ tasks.register("versionsPrint") {
         BuildSrcGlobal.printlnColor(foreground, "       tgtComp: " + java.targetCompatibility, background)
         BuildSrcGlobal.printlnColor(foreground, "versions of core dependencies:", background)
         val regex = Regex(pattern = "^(spring-cloud-starter|spring-boot-starter|micronaut-core|kotlin-stdlib-jdk[0-9-]+|foundation-desktop)-[0-9].*$")
-        if (subprojects.size > 0) {
-            configurations.compileClasspath.get().map { it.nameWithoutExtension }.filter { it.matches(regex) }
-                .forEach { BuildSrcGlobal.printlnColor(foreground, String.format("%-25s: %s", project.name, it), background) }
-        } else {
-            configurations.compileClasspath.get().map { it.nameWithoutExtension }.filter { it.matches(regex) }
-                .forEach { BuildSrcGlobal.printlnColor(foreground, "  $it", background) }
-        }
+        project.pluginManager.let() { when {
+            it.hasPlugin("org.jetbrains.kotlin.jvm") -> {
+                if (subprojects.size > 0) {
+                    configurations.compileClasspath.get().files.map { it.nameWithoutExtension }.filter { it.matches(regex) }
+                        .forEach { BuildSrcGlobal.printlnColor(foreground, String.format("%-25s: %s", project.name, it), background) }
+                } else {
+                    configurations.compileClasspath.get().files.map { it.nameWithoutExtension }.filter { it.matches(regex) }
+                        .forEach { BuildSrcGlobal.printlnColor(foreground, "  $it", background) }
+                }
+            }
+            it.hasPlugin("org.jetbrains.kotlin.multiplatform") -> {
+                if (subprojects.size > 0) {
+                    configurations.getByName("jvmCompileClasspath").files.map { it.nameWithoutExtension }.filter { it.matches(regex) }
+                        .forEach { BuildSrcGlobal.printlnColor(foreground, String.format("%-25s: %s", project.name, it), background) }
+                } else {
+                    configurations.getByName("jvmCompileClasspath").files.map { it.nameWithoutExtension }.filter { it.matches(regex) }
+                        .forEach { BuildSrcGlobal.printlnColor(foreground, "  $it", background) }
+                }
+            }
+        }}
     }
 }
 val build by tasks.existing {
